@@ -34,26 +34,63 @@ add_action( 'admin_init', create_function( '', 'new Styles_Font_Dropdown();') );
 
 class Styles_Font_Dropdown {
 
-	const font_api_url = 'https://www.googleapis.com/webfonts/v1/webfonts';
-
 	/**
 	 * @var Styles_Google_Fonts Connects to Google Font API
 	 */
 	var $google_fonts;
 
+	var $version = '1.0';
+
 	public function __construct() {
 		$this->google_fonts = new Styles_Google_Fonts();
 
-		echo '<pre>';
-		print_r( $this->google_fonts->families );
-		exit;
+		/**
+		 * Output dropdown menu anywhere styles_fonts_dropdown action is called.
+		 * @example <code>do_action( 'styles_fonts_dropdown' );</code>
+		 */
+		add_action( 'styles_fonts_dropdown', array( $this, 'get_dropdown' ) );
+
+		// Testing only
+		add_action( 'admin_init', array( $this, 'test_dropdown_action' ), 11 );
+
+		wp_register_script( 'styles-chosen', plugins_url( 'js/chosen/chosen.jquery.min.js', __FILE__ ), array( 'jquery' ), $this->version );
+		wp_register_script( 'styles-fonts-dropdown', plugins_url( 'js/styles-fonts-dropdown.js', __FILE__ ), array( 'jquery', 'styles-chosen' ), $this->version );
+		wp_register_style(  'styles-chosen', plugins_url( 'js/chosen/chosen.min.css', __FILE__ ), array(), $this->version );
+	}
+
+	/**
+	 * Make sure the output action works. Testing only.
+	 */
+	public function test_dropdown_action() {
+		do_action( 'styles_fonts_dropdown' );
+	}
+
+	public function get_dropdown() {
+		$this->get_view( 'dropdown' );
+	}
+
+	public function get_view( $file = 'dropdown' ) {
+		// Ensure dependencies have been output by now.
+		wp_print_scripts( array( 'styles-fonts-dropdown' ) );
+		wp_print_styles( array( 'styles-chosen' ) );
+
+		$file = dirname( __FILE__ ) . "/views/$file.php";
+		if ( file_exists( $file ) ) {
+			include $file;
+		}
 	}
 
 }
 
 class Styles_Google_Fonts {
 
-	var $cache_interval = 1296000; // 15 days
+	const font_api_url = 'https://www.googleapis.com/webfonts/v1/webfonts';
+
+	/**
+	 * @example Override with <code>add_filter( 'styles_google_fonts_cache_interval', function(){ return 60*60*24*1; } );</code>
+	 * @var int Seconds before cache expires. Defaults to 15 days.
+	 */
+	var $cache_interval;
 
 	/**
 	 * @var stdClass Response from Google API listing all fonts
@@ -66,6 +103,8 @@ class Styles_Google_Fonts {
 	private $families;
 
 	public function __construct() {
+		$this->cache_interval = apply_filters( 'styles_google_fonts_cache_interval', 60*60*24*15 ); // 15 days
+
 		$this->get_fonts();
 	}
 
@@ -114,7 +153,7 @@ class Styles_Google_Fonts {
 			$this->fonts = null;
 		}
 
-		set_transient( 'styles_google_fonts', $this->fonts, $this->$cache_interval );
+		set_transient( 'styles_google_fonts', $this->fonts, $this->cache_interval );
 		return $this->fonts;
 	}
 

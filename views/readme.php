@@ -15,7 +15,4 @@
 		list-style-type: disc;
 		margin-left: 30px;
 	}
-	.example-output {
-		display:none;
-	}
 </style>

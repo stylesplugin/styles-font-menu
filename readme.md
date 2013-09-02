@@ -1,8 +1,8 @@
-### Example output {.example-output}
+### Example output
 
-![Example output](https://raw.github.com/stylesplugin/styles-font-dropdown/develop/img/example-output.png)
+![Example output](//raw.github.com/stylesplugin/styles-font-dropdown/develop/img/example-output.png)
 
-This submenu can be displayed in your templates with this code: `do_action( 'styles_fonts_dropdown' );`
+This menu can be displayed in your templates with this code: `do_action( 'styles_fonts_dropdown' );`
 
 ## Including in plugins and themes
 

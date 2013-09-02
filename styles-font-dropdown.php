@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Styles: Font Dropdown
-Plugin URI: http://stylesplugin.com
+Plugin URI: http://github.com/stylesplugin/styles-font-dropdown
 Description: Display a drop-down of Google Fonts with previews.
 Version: 1.0
 Author: Brainstorm Media
@@ -30,103 +30,24 @@ Author URI: http://brainstormmedia.com
  * **********************************************************************
  */
 
-add_action( 'admin_init', create_function( '', 'new Styles_Font_Dropdown();') );
+if ( !function_exists( 'styles_font_dropdown_init' ) ) :
 
-class Styles_Font_Dropdown {
+function styles_font_dropdown_init() {
+	if ( is_admin() ) {
+		$exit_message = esc_html__( 'Styles Font Dropdown requires PHP 5.2.4 or newer. <a href="http://wordpress.org/about/requirements/">Please update.</a>', 'styles-font-dropdown' );
+		if ( version_compare( PHP_VERSION, '5.2.4', '<' ) ) {
+			exit( $exit_message );
+		}
+	}
 
-	const font_api_url = 'https://www.googleapis.com/webfonts/v1/webfonts';
+	// Won't apply if we're not running as a plugin
+	if ( !defined( 'STYLES_FONT_DROPDOWN_BASENAME' ) ) define( 'STYLES_FONT_DROPDOWN_BASENAME', plugin_basename( __FILE__ ) );
 
-	/**
-	 * @var Styles_Google_Fonts Connects to Google Font API
-	 */
-	var $google_fonts;
-
-	public function __construct() {
-		$this->google_fonts = new Styles_Google_Fonts();
-
-		echo '<pre>';
-		print_r( $this->google_fonts->families );
-		exit;
+	if ( !class_exists( 'Styles_Font_Dropdown' ) ) {
+		require_once dirname( __FILE__ ) . '/classes/styles-font-dropdown.php';
 	}
 
 }
+add_action( 'plugins_loaded', 'styles_font_dropdown_init' );
 
-class Styles_Google_Fonts {
-
-	var $cache_interval = 1296000; // 15 days
-
-	/**
-	 * @var stdClass Response from Google API listing all fonts
-	 */
-	private $fonts;
-
-	/**
-	 * @var array All font families mentioned in $fonts
-	 */
-	private $families;
-
-	public function __construct() {
-		$this->get_fonts();
-	}
-
-	/**
-	 * If client tries to access variables directly, pass to get() method
-	 */
-	public function __get( $target ) {
-		return $this->get( $target );
-	}
-
-	/**
-	 * If a get_XXX method exists for a variable, use it.
-	 * Otherwise, return the variable value
-	 */
-	public function get( $target = 'fonts' ) {
-		$method = 'get_' . $target;
-		if ( method_exists( __CLASS__, $method ) ) {
-			return $this->$method();
-		}else if ( isset( $this->$target ) ){
-			return $this->$target;
-		}else {
-			return false;
-		}
-	}
-
-	public function get_fonts() {
-		// Return from cache if available
-		$this->fonts = get_transient( 'styles_google_fonts' );
-		if ( false !==  $this->fonts ) { return $this->fonts; }
-
-		// Bail if no API key is set
-		$api_key = apply_filters( 'styles_google_font_api', '' );
-		if ( empty( $api_key ) ) { return false; }
-
-		// Construct request
-		$url = add_query_arg( 'sort', apply_filters( 'styles_google_font_sort', 'popularity' ), self::font_api_url );
-		$url = add_query_arg( 'key', $api_key, $url );
-		$response = wp_remote_get( $url );
-
-		if ( is_a( $response, 'WP_Error') ) { return false; }
-
-		$fonts = json_decode( $response['body'] );
-
-		if ( !is_array( $fonts->items ) ) {
-			// @todo check to see if this messes up the caching above
-			$this->fonts = null;
-		}
-
-		set_transient( 'styles_google_fonts', $this->fonts, $this->$cache_interval );
-		return $this->fonts;
-	}
-
-	public function get_families() {
-		if ( !empty( $this->families ) ) { return $this->families; }
-
-		foreach ( (array) $this->fonts->items as $font ){
-			$this->families[] = $font->family;
-		}
-
-		return $this->families;
-	}
-
-
-}
+endif;

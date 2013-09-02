@@ -2,7 +2,7 @@
 /*
 Plugin Name: Styles: Font Dropdown
 Plugin URI: http://github.com/stylesplugin/styles-font-dropdown
-Description: Display a drop-down of Google Fonts with previews.
+Description: Display an up-to-date drop-down of Google Fonts. Activate as a plugin just for testing. Otherwise, include it in your own plugins and themes.
 Version: 1.0
 Author: Brainstorm Media
 Author URI: http://brainstormmedia.com

@@ -6,7 +6,7 @@
 	<h3 class="example-output">Example output</h3>
 	<p><?php do_action( 'styles_fonts_dropdown' ); ?></p>
 
-	<?php echo Markdown( file_get_contents( STYLES_FONT_DROPDOWN_DIR . '/readme.md' ) ); ?>
+	<?php echo Markdown( file_get_contents( dirname( dirname( __FILE__ ) ) . '/readme.md' ) ); ?>
 
 </div>
 

@@ -29,7 +29,7 @@ class Styles_Google_Fonts extends Styles_Fonts {
 
 	public function __construct() {
 		$this->cache_interval = apply_filters( 'styles_google_fonts_cache_interval', 60*60*24*15 ); // 15 days
-		$this->api_fallback_file = STYLES_FONT_DROPDOWN_DIR . '/js/google-fonts-api-fallback.json';
+		$this->api_fallback_file = dirname( dirname( __FILE__ ) ) . '/js/google-fonts-api-fallback.json';
 	}
 
 	/**

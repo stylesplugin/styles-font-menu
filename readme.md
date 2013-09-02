@@ -1,6 +1,6 @@
 ## Example output
 
-![Example output](https://raw.github.com/stylesplugin/styles-font-dropdown/master/img/example-output.png)
+![Example output](https://raw.github.com/stylesplugin/styles-font-dropdown/master/img/example-output.gif)
 
 This menu can be displayed in your templates with this code: `do_action( 'styles_fonts_dropdown' );`
 

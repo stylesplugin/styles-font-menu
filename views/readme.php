@@ -27,5 +27,23 @@
 		var $demo = $('h2:contains(Live Demo)');
 		$demo.nextUntil('h2').remove();
 		$demo.remove();
+
+		$('select').change( function(){
+
+			var font = $(this).val();
+			var name = $(this).find('option').filter(":selected").text();
+			var $headings = $('#icon-plugins').nextAll('h2,h3');
+
+			if ( -1 != font.indexOf(':') ) {
+				// Google Font
+				var atImport = "@import url(//fonts.googleapis.com/css?family=@SRC@);\r";
+				atImport = atImport.replace( '@SRC@', font );
+				$('head').append( '<style>' + atImport + '</style>' );
+				$headings.css('font-family', name );
+			}else {
+				// Standard Font
+				$headings.css('font-family', font );
+			}
+		});
 	});
 </script>

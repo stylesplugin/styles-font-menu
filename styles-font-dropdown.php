@@ -39,6 +39,11 @@ require_once dirname( __FILE__ ) . '/classes/styles-google-fonts.php';
 class Styles_Font_Dropdown {
 
 	/**
+	 * @var Styles_Standard_Fonts Web standard font families and CSS font stacks
+	 */
+	var $standard_fonts;
+
+	/**
 	 * @var Styles_Google_Fonts Connects to Google Font API
 	 */
 	var $google_fonts;

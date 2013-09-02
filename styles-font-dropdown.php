@@ -55,7 +55,12 @@ class Styles_Font_Dropdown {
 
 		wp_register_script( 'styles-chosen', plugins_url( 'js/chosen/chosen.jquery.min.js', __FILE__ ), array( 'jquery' ), $this->version );
 		wp_register_script( 'styles-fonts-dropdown', plugins_url( 'js/styles-fonts-dropdown.js', __FILE__ ), array( 'jquery', 'styles-chosen' ), $this->version );
-		wp_register_style(  'styles-chosen', plugins_url( 'js/chosen/chosen.min.css', __FILE__ ), array(), $this->version );
+		wp_register_style( 'styles-chosen', plugins_url( 'js/chosen/chosen.min.css', __FILE__ ), array(), $this->version );
+
+		// Pass Google Font Families to javascript
+		// This saves on bandwidth by outputing them once,
+		// then appending them to all <select> elements client-side
+		wp_localize_script( 'styles-fonts-dropdown', 'styles_google_families', $this->google_fonts->families );
 	}
 
 	/**

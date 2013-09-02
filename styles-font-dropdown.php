@@ -34,6 +34,8 @@ add_action( 'admin_menu', create_function( '', 'new Styles_Font_Dropdown();') );
 
 define( 'STYLES_FONT_DROPDOWN_DIR', dirname( __FILE__ ) );
 
+if ( !class_exists( 'Styles_Font_Dropdown' ) ):
+
 require_once STYLES_FONT_DROPDOWN_DIR . '/classes/styles-fonts.php';
 require_once STYLES_FONT_DROPDOWN_DIR . '/classes/styles-standard-fonts.php';
 require_once STYLES_FONT_DROPDOWN_DIR . '/classes/styles-google-fonts.php';
@@ -131,3 +133,5 @@ class Styles_Font_Dropdown {
 		}
 	}
 }
+
+endif;

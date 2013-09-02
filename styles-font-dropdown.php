@@ -32,9 +32,11 @@ Author URI: http://brainstormmedia.com
 
 add_action( 'admin_menu', create_function( '', 'new Styles_Font_Dropdown();') );
 
-require_once dirname( __FILE__ ) . '/classes/styles-fonts.php';
-require_once dirname( __FILE__ ) . '/classes/styles-standard-fonts.php';
-require_once dirname( __FILE__ ) . '/classes/styles-google-fonts.php';
+define( 'STYLES_FONT_DROPDOWN_DIR', dirname( __FILE__ ) );
+
+require_once STYLES_FONT_DROPDOWN_DIR . '/classes/styles-fonts.php';
+require_once STYLES_FONT_DROPDOWN_DIR . '/classes/styles-standard-fonts.php';
+require_once STYLES_FONT_DROPDOWN_DIR . '/classes/styles-google-fonts.php';
 
 class Styles_Font_Dropdown {
 
@@ -55,6 +57,8 @@ class Styles_Font_Dropdown {
 	 * This prevents running multiple times
 	 */
 	var $scripts_registered = false;
+
+	var $readme_page_slug = 'styles-font-dropdown';
 
 	public function __construct() {
 		$this->google_fonts = new Styles_Google_Fonts();
@@ -77,7 +81,7 @@ class Styles_Font_Dropdown {
 	 */
 	public function plugin_row_meta( $meta, $basename ) {
 		if ( $basename == plugin_basename( __FILE__ ) ) {
-			$meta[] = '<a href="' . network_admin_url( 'plugins.php?page=styles-font-dropdown-example' ) . '">How to use this plugin</a>';
+			$meta[] = '<a href="' . network_admin_url( 'plugins.php?page=' . $this->readme_page_slug ) . '">How to use this plugin</a>';
 		}
 		return $meta;
 	}
@@ -101,12 +105,12 @@ class Styles_Font_Dropdown {
 	 * Make sure the output action works. Testing only.
 	 */
 	public function add_readme_page() {
-		add_submenu_page( null, 'Font Dropdown Menu', 'Font Dropdown Menu', 'manage_options', 'styles-font-dropdown-example', array( $this, 'example_page' ) );
+		add_submenu_page( null, 'Font Dropdown Menu', 'Font Dropdown Menu', 'manage_options', $this->readme_page_slug, array( $this, 'readme_page' ) );
 	}
 
-	public function example_page() {
+	public function readme_page() {
 		if ( !function_exists( 'Markdown' ) ) {
-			require_once dirname( __FILE__ ) . '/classes/markdown/markdown.php';
+			require_once STYLES_FONT_DROPDOWN_DIR . '/classes/markdown/markdown.php';
 		}
 		$this->get_view( 'readme' );
 	}
@@ -121,7 +125,7 @@ class Styles_Font_Dropdown {
 		wp_print_scripts( array( 'styles-fonts-dropdown' ) );
 		wp_print_styles( array( 'styles-chosen' ) );
 
-		$file = dirname( __FILE__ ) . "/views/$file.php";
+		$file = STYLES_FONT_DROPDOWN_DIR . "/views/$file.php";
 		if ( file_exists( $file ) ) {
 			include $file;
 		}

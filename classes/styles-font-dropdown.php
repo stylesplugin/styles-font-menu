@@ -60,7 +60,6 @@ class Styles_Font_Dropdown {
 	 * because STYLES_FONT_DROPDOWN_BASENAME won't be a valid plugin path.
 	 */
 	public function plugin_row_meta( $meta, $basename ) {
-		exit( STYLES_FONT_DROPDOWN_BASENAME );
 		if ( $basename == STYLES_FONT_DROPDOWN_BASENAME ) {
 			$meta[] = '<a href="' . network_admin_url( 'plugins.php?page=' . $this->readme_page_slug ) . '">How to use this plugin</a>';
 		}

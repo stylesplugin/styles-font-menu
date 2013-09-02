@@ -54,7 +54,7 @@ The possible sorting values are:
 
 Note that you may need to flush your transients for the new sort order to appear immediately.
 
-[Read more about the Google Fonts developer API](https://developers.google.com/fonts/docs/getting_started)
+[Read more about the Google Fonts developer API](https://developers.google.com/fonts/docs/getting_started).
 
 ## About the drop-down menu
 

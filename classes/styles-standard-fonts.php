@@ -12,7 +12,7 @@ class Styles_Standard_Fonts extends Styles_Fonts {
 		if ( !empty( $this->families ) ) { return $this->families; }
 
 		foreach ( (array) $this->fonts as $family => $value ){
-			$this->families[] = $family;
+			$this->families[ $family ] = $value;
 		}
 
 		return $this->families;

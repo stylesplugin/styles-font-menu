@@ -26,11 +26,9 @@ jQuery( document ).ready( function( $ ){
 		}
 
 		plugin.populate_google_fonts = function() {
-			console.log( styles_google_families );
-
 			var google_options = "<optgroup class='google-fonts' label='Google Fonts'>";
-			$.each( styles_google_families, function( i, name ){
-				google_options += "<option value='" + name + "'>" + name + "</option>";
+			$.each( styles_google_families, function( family, variants ){
+				google_options += "<option value='" + variants + "'>" + family + "</option>";
 			});
 			google_options += "</optgroup>"
 

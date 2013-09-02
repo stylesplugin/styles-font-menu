@@ -61,7 +61,8 @@ class Styles_Google_Fonts extends Styles_Fonts {
 		if ( !empty( $this->families ) ) { return $this->families; }
 
 		foreach ( (array) $this->get_fonts()->items as $font ){
-			$this->families[] = $font->family;
+			$variants = str_replace( ' ', '+', $font->family ) . ':' . implode( ',', $font->variants );
+			$this->families[ $font->family ] = $variants;
 		}
 
 		return $this->families;

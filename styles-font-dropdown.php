@@ -68,7 +68,7 @@ class Styles_Font_Dropdown {
 
 		// Example page
 		add_filter( 'plugin_row_meta', array( $this, 'plugin_row_meta' ), 10, 2 );
-		add_action( 'admin_menu', array( $this, 'add_example_page' ), 11 );
+		add_action( 'admin_menu', array( $this, 'add_readme_page' ), 11 );
 
 	}
 
@@ -100,12 +100,15 @@ class Styles_Font_Dropdown {
 	/**
 	 * Make sure the output action works. Testing only.
 	 */
-	public function add_example_page() {
+	public function add_readme_page() {
 		add_submenu_page( null, 'Font Dropdown Menu', 'Font Dropdown Menu', 'manage_options', 'styles-font-dropdown-example', array( $this, 'example_page' ) );
 	}
 
 	public function example_page() {
-		$this->get_view( 'example' );
+		if ( !function_exists( 'Markdown' ) ) {
+			require_once dirname( __FILE__ ) . '/classes/markdown/markdown.php';
+		}
+		$this->get_view( 'readme' );
 	}
 
 	public function get_dropdown() {

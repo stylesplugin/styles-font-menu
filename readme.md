@@ -1,6 +1,6 @@
 ## Example output
 
-![Example output](//raw.github.com/stylesplugin/styles-font-dropdown/master/img/example-output.png)
+![Example output](https://raw.github.com/stylesplugin/styles-font-dropdown/master/img/example-output.png)
 
 This menu can be displayed in your templates with this code: `do_action( 'styles_fonts_dropdown' );`
 
@@ -8,7 +8,7 @@ This menu can be displayed in your templates with this code: `do_action( 'styles
 
 To view a live demo of the menu in action, install and activate this WordPress plugin. Once activated, you can click the "How to use this plugin" link to view a working example.
 
-![Example output](//raw.github.com/stylesplugin/styles-font-dropdown/master/img/live-demo.png)
+![Example output](https://raw.github.com/stylesplugin/styles-font-dropdown/master/img/live-demo.png)
 
 ## Including in plugins and themes
 

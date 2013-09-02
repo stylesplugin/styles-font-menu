@@ -43,6 +43,7 @@ class Styles_Font_Dropdown {
 
 	public function __construct() {
 		$this->google_fonts = new Styles_Google_Fonts();
+		$this->standard_fonts = new Styles_Standard_Fonts();
 
 		/**
 		 * Output dropdown menu anywhere styles_fonts_dropdown action is called.
@@ -84,34 +85,11 @@ class Styles_Font_Dropdown {
 			include $file;
 		}
 	}
-
 }
 
-class Styles_Google_Fonts {
-
-	const font_api_url = 'https://www.googleapis.com/webfonts/v1/webfonts';
-
-	/**
-	 * @example Override with <code>add_filter( 'styles_google_fonts_cache_interval', function(){ return 60*60*24*1; } );</code>
-	 * @var int Seconds before cache expires. Defaults to 15 days.
-	 */
-	var $cache_interval;
-
-	/**
-	 * @var stdClass Response from Google API listing all fonts
-	 */
-	private $fonts;
-
-	/**
-	 * @var array All font families mentioned in $fonts
-	 */
-	private $families;
-
-	public function __construct() {
-		$this->cache_interval = apply_filters( 'styles_google_fonts_cache_interval', 60*60*24*15 ); // 15 days
-
-		$this->get_fonts();
-	}
+abstract class Styles_Fonts {
+	protected $fonts;
+	protected $families;
 
 	/**
 	 * If client tries to access variables directly, pass to get() method
@@ -126,7 +104,7 @@ class Styles_Google_Fonts {
 	 */
 	public function get( $target = 'fonts' ) {
 		$method = 'get_' . $target;
-		if ( method_exists( __CLASS__, $method ) ) {
+		if ( method_exists( $this, $method ) ) {
 			return $this->$method();
 		}else if ( isset( $this->$target ) ){
 			return $this->$target;
@@ -135,6 +113,57 @@ class Styles_Google_Fonts {
 		}
 	}
 
+}
+
+class Styles_Standard_Fonts extends Styles_Fonts {
+
+	protected $fonts = array( 'Arial' => 'Arial, Helvetica, sans-serif', 'Bookman' => 'Bookman, Palatino, Georgia, serif', 'Century Gothic' => '"Century Gothic", Helvetica, Arial, sans-serif', 'Comic Sans MS' => '"Comic Sans MS", Arial, sans-serif', 'Courier' => 'Courier, monospace', 'Garamond' => 'Garamond, Palatino, Georgia, serif', 'Georgia' => 'Georgia, Times, serif', 'Helvetica' => 'Helvetica, Arial, sans-serif', 'Lucida Grande' => '"Lucida Grande","Lucida Sans Unicode",Tahoma,Verdana,sans-serif', 'Palatino' => 'Palatino, Georgia, serif', 'Tahoma' => 'Tahoma, Verdana, Helvetica, sans-serif', 'Times' => 'Times, Georgia, serif', 'Trebuchet MS' => '"Trebuchet MS", Tahoma, Helvetica, sans-serif', 'Verdana' => 'Verdana, Tahoma, sans-serif', );
+	protected $families;
+
+	/**
+	 * Fires when accessing $this->families from outside the class.
+	 */
+	public function get_families() {
+		if ( !empty( $this->families ) ) { return $this->families; }
+
+		foreach ( (array) $this->fonts as $family => $value ){
+			$this->families[] = $family;
+		}
+
+		return $this->families;
+	}
+
+}
+
+class Styles_Google_Fonts extends Styles_Fonts {
+
+	const font_api_url = 'https://www.googleapis.com/webfonts/v1/webfonts';
+
+	/**
+	 * @example Override with <code>add_filter( 'styles_google_fonts_cache_interval', function(){ return 60*60*24*1; } );</code>
+	 * @var int Seconds before cache expires. Defaults to 15 days.
+	 */
+	var $cache_interval;
+
+	/**
+	 * @var stdClass Response from Google API listing all fonts
+	 */
+	protected $fonts;
+
+	/**
+	 * @var array All font families mentioned in $fonts
+	 */
+	protected $families;
+
+	public function __construct() {
+		$this->cache_interval = apply_filters( 'styles_google_fonts_cache_interval', 60*60*24*15 ); // 15 days
+
+		$this->get_fonts();
+	}
+
+	/**
+	 * Fires when accessing $this->fonts from outside the class.
+	 */
 	public function get_fonts() {
 		// Return from cache if available
 		$this->fonts = get_transient( 'styles_google_fonts' );
@@ -162,6 +191,9 @@ class Styles_Google_Fonts {
 		return $this->fonts;
 	}
 
+	/**
+	 * Fires when accessing $this->families from outside the class.
+	 */
 	public function get_families() {
 		if ( !empty( $this->families ) ) { return $this->families; }
 

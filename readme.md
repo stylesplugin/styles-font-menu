@@ -17,9 +17,11 @@ Styles Font Dropdown has been packaged as a plugin only for testing purposes. In
 ## Select Menu Values
 
 **Standard Fonts**
+
 For standard fonts, the option value is set to a font stack, such as `Arial, Helvetica, sans-serif`, suitable for output as the value of a CSS `font-family` declaration.
 
 **Google Fonts**
+
 For Google fonts, the option value is set to the URL fragment that can be passed as an `@import` request. For example, `Droid+Sans:regular,700`
 
 This value should be inserted into an `@import url(//fonts.googleapis.com/css?family=$value);` declaration at the top of your CSS.
@@ -29,11 +31,13 @@ For example, final output for Droid Sans would be `@import url(//fonts.googleapi
 ## Google Fonts API
 
 **Automatic Updates**
+
 If you [get a Google Fonts API key][1], you can enable auto-updates of the Google font list. By default, it caches and updates every 15 days.
 
 The API key can be set in your local environment, or for all your users. If you enable it only for development, the values will update `wp-content/plugins/styles-font-dropdown/js/google-fonts-api-fallback.json` for users who do not have API access.
 
 **Setting your API key**
+
 Once you [get a Google Fonts API key][1], you can set it with `add_filter( 'styles_google_font_api', create_function('', "return 'YOUR_KEY_HERE';" ) );`
 
 ## Changing the cache interval

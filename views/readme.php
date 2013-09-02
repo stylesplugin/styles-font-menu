@@ -28,7 +28,7 @@
 		$demo.nextUntil('h2').remove();
 		$demo.remove();
 
-		$('select').change( function(){
+		$('select.styles-font-dropdown').change( function(){
 
 			var font = $(this).val();
 			var name = $(this).find('option').filter(":selected").text();

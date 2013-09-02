@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Styles: Font Dropdown
-Plugin URI: http://stylesplugin.com
+Plugin URI: http://github.com/stylesplugin/styles-font-dropdown
 Description: Display a drop-down of Google Fonts with previews.
 Version: 1.0
 Author: Brainstorm Media
@@ -30,7 +30,7 @@ Author URI: http://brainstormmedia.com
  * **********************************************************************
  */
 
-add_action( 'admin_init', create_function( '', 'new Styles_Font_Dropdown();') );
+add_action( 'admin_menu', create_function( '', 'new Styles_Font_Dropdown();') );
 
 require_once dirname( __FILE__ ) . '/classes/styles-fonts.php';
 require_once dirname( __FILE__ ) . '/classes/styles-standard-fonts.php';
@@ -66,8 +66,20 @@ class Styles_Font_Dropdown {
 		 */
 		add_action( 'styles_fonts_dropdown', array( $this, 'get_dropdown' ) );
 
-		// Testing only
-		add_action( 'admin_init', array( $this, 'test_dropdown_action' ), 11 );
+		// Example page
+		add_filter( 'plugin_row_meta', array( $this, 'plugin_row_meta' ), 10, 2 );
+		add_action( 'admin_menu', array( $this, 'add_example_page' ), 11 );
+
+	}
+
+	/**
+	 * Add additional links to the plugin row
+	 */
+	public function plugin_row_meta( $meta, $basename ) {
+		if ( $basename == plugin_basename( __FILE__ ) ) {
+			$meta[] = '<a href="' . network_admin_url( 'plugins.php?page=styles-font-dropdown-example' ) . '">How to use this plugin</a>';
+		}
+		return $meta;
 	}
 
 	public function register_scripts() {
@@ -88,8 +100,12 @@ class Styles_Font_Dropdown {
 	/**
 	 * Make sure the output action works. Testing only.
 	 */
-	public function test_dropdown_action() {
-		do_action( 'styles_fonts_dropdown' );
+	public function add_example_page() {
+		add_submenu_page( null, 'Font Dropdown Menu', 'Font Dropdown Menu', 'manage_options', 'styles-font-dropdown-example', array( $this, 'example_page' ) );
+	}
+
+	public function example_page() {
+		$this->get_view( 'example' );
 	}
 
 	public function get_dropdown() {

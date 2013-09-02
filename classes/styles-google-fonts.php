@@ -20,6 +20,8 @@ class Styles_Google_Fonts extends Styles_Fonts {
 	 */
 	protected $families;
 
+	protected $css_import_template = "@import url(//fonts.googleapis.com/css?family=@SRC@);\r";
+
 	/**
 	 * @var string path to JSON backup of Google API response. In case API fails or is unavailable.
 	 */

@@ -48,6 +48,7 @@ class Styles_Font_Dropdown {
 	public function __construct() {
 		$this->google_fonts = new Styles_Google_Fonts();
 		$this->standard_fonts = new Styles_Standard_Fonts();
+		$this->register_scripts();
 
 		/**
 		 * Output dropdown menu anywhere styles_fonts_dropdown action is called.
@@ -57,7 +58,9 @@ class Styles_Font_Dropdown {
 
 		// Testing only
 		add_action( 'admin_init', array( $this, 'test_dropdown_action' ), 11 );
+	}
 
+	public function register_scripts() {
 		wp_register_script( 'styles-chosen', plugins_url( 'js/chosen/chosen.jquery.min.js', __FILE__ ), array( 'jquery' ), $this->version );
 		wp_register_script( 'styles-fonts-dropdown', plugins_url( 'js/styles-fonts-dropdown.js', __FILE__ ), array( 'jquery', 'styles-chosen' ), $this->version );
 		wp_register_style( 'styles-chosen', plugins_url( 'js/chosen/chosen.min.css', __FILE__ ), array(), $this->version );

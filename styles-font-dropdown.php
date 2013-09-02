@@ -45,10 +45,15 @@ class Styles_Font_Dropdown {
 
 	var $version = '1.0';
 
+	/**
+	 * register_scripts() runs as late as possible to avoid processing Google Fonts
+	 * This prevents running multiple times
+	 */
+	var $scripts_registered = false;
+
 	public function __construct() {
 		$this->google_fonts = new Styles_Google_Fonts();
 		$this->standard_fonts = new Styles_Standard_Fonts();
-		$this->register_scripts();
 
 		/**
 		 * Output dropdown menu anywhere styles_fonts_dropdown action is called.
@@ -61,6 +66,8 @@ class Styles_Font_Dropdown {
 	}
 
 	public function register_scripts() {
+		if ( $this->scripts_registered ) { return false; }
+
 		wp_register_script( 'styles-chosen', plugins_url( 'js/chosen/chosen.jquery.min.js', __FILE__ ), array( 'jquery' ), $this->version );
 		wp_register_script( 'styles-fonts-dropdown', plugins_url( 'js/styles-fonts-dropdown.js', __FILE__ ), array( 'jquery', 'styles-chosen' ), $this->version );
 		wp_register_style( 'styles-chosen', plugins_url( 'js/chosen/chosen.min.css', __FILE__ ), array(), $this->version );
@@ -69,6 +76,8 @@ class Styles_Font_Dropdown {
 		// This saves on bandwidth by outputing them once,
 		// then appending them to all <select> elements client-side
 		wp_localize_script( 'styles-fonts-dropdown', 'styles_google_families', $this->google_fonts->families );
+
+		$this->scripts_registered = true;
 	}
 
 	/**
@@ -83,7 +92,8 @@ class Styles_Font_Dropdown {
 	}
 
 	public function get_view( $file = 'dropdown' ) {
-		// Ensure dependencies have been output by now.
+		// Load Google Fonts and scripts as late as possible
+		$this->register_scripts();
 		wp_print_scripts( array( 'styles-fonts-dropdown' ) );
 		wp_print_styles( array( 'styles-chosen' ) );
 

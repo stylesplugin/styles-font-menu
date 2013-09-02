@@ -22,8 +22,6 @@ class Styles_Google_Fonts extends Styles_Fonts {
 
 	public function __construct() {
 		$this->cache_interval = apply_filters( 'styles_google_fonts_cache_interval', 60*60*24*15 ); // 15 days
-
-		$this->get_fonts();
 	}
 
 	/**
@@ -62,7 +60,7 @@ class Styles_Google_Fonts extends Styles_Fonts {
 	public function get_families() {
 		if ( !empty( $this->families ) ) { return $this->families; }
 
-		foreach ( (array) $this->fonts->items as $font ){
+		foreach ( (array) $this->get_fonts()->items as $font ){
 			$this->families[] = $font->family;
 		}
 

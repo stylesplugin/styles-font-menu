@@ -50,7 +50,7 @@ class Styles_Font_Dropdown {
 
 	public function __construct() {
 		$this->plugin_directory = site_url( str_replace( ABSPATH, '', dirname( dirname( __FILE__ ) ) ) );
-		$this->plugin_basename = plugin_basename( dirname( dirname( __FILE__ ) ) );
+		$this->plugin_basename = plugin_basename( dirname( dirname( __FILE__ ) ) . '/plugin.php' );
 
 		$this->google_fonts = new Styles_Google_Fonts();
 		$this->standard_fonts = new Styles_Standard_Fonts();

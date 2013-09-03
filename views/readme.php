@@ -3,10 +3,10 @@
 	<?php screen_icon(); ?>
 	<h2><?php _e('Font Dropdown Menu', 'styles-font-dropdown'); ?></h2>
 
+	<p><a href="#" id="generate-previews">Generate Font Previews</a></p>
+
 	<h3 class="example-output">Example output</h3>
 	<p><?php do_action( 'styles_font_dropdown' ); ?></p>
-
-	<p><a href="#" id="generate-previews">Generate Font Previews</a></p>
 
 	<?php echo Markdown( file_get_contents( dirname( dirname( __FILE__ ) ) . '/readme.md' ) ); ?>
 
@@ -17,6 +17,9 @@
 	#styles-font-dropdown-readme > ul {
 		list-style-type: disc;
 		margin-left: 30px;
+	}
+	.styles-font-dropdown .chosen-results {
+		max-height: 400px !important;
 	}
 </style>
 
@@ -60,7 +63,7 @@
 				$('#generate-previews').after( img ).after( '<br/>' );
 
 				$next = $option.next( 'option' );
-				if ( $next ) {
+				if ( $next.length > 0 ) {
 					generate_preview( $next );
 				}else {
 					$('#generate-previews').after( '<br/>Done' );

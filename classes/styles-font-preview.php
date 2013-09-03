@@ -79,12 +79,12 @@ class Styles_Font_Preview {
 
 		$nicename = strtolower( preg_replace( '/[^a-zA-Z0-9]/', '', $this->font_family ) );
 
-		$this->font_filename =  "$nicename-{$this->font_variant}";
-		$this->font_ttf_path = $this->fonts_directory . '/ttf/' . $this->font_filename . '.ttf';
-		$this->font_png_path = $this->fonts_directory . '/png/' . $this->font_filename . '.png';
-		$this->font_png_url = $this->fonts_directory_url . '/png/' . $this->font_filename . '.png';
+		$this->font_filename =  "$nicename-{$this->font_variant}.ttf";
+		$this->font_ttf_path = $this->fonts_directory . '/ttf/' . $this->font_filename;
 
-		$this->font_filename = $this->font_filename . '.ttf';
+		// Variant removed from png names
+		$this->font_png_path = $this->fonts_directory .  "/png/$nicename.png";
+		$this->font_png_url = $this->fonts_directory_url . "/png/$nicename.png";
 
 		$this->maybe_get_remote_font();
 	}

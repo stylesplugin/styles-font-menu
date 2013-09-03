@@ -10,11 +10,19 @@ jQuery( document ).ready( function( $ ){
 	/**
 	 * Build Google Fonts option list only once
 	 */
+	var google_styles = '<style>';
 	var google_options = "<optgroup class='google-fonts' label='Google Fonts'>";
 	for (var i=0; i < styles_google_options.fonts.length; i++){
-		google_options += "<option value='" + JSON.stringify( styles_google_options.fonts[i] ) + "'>" + styles_google_options.fonts[i].font_family + "</option>";
+		var classname = styles_google_options.fonts[i].font_family.replace( /[^a-zA-z0-9]/, '' ).toLowerCase();
+		google_options += "<option class='" + classname + "' value='" + JSON.stringify( styles_google_options.fonts[i] ) + "'>" + styles_google_options.fonts[i].font_family + "</option>";
+
+		google_styles += "." + classname + " { background: url(/wp-content/uploads/styles-fonts/png/" + classname + ".png) no-repeat; height:90px; text-indent: -9999px; overflow:hidden; }\r";
 	}
 	google_options += "</optgroup>";
+	google_styles += "</style>";
+
+	$('head').append( google_styles );
+
 
 	/**
 	 * Define jQuery plugin to act on and attach to select elements
@@ -30,7 +38,9 @@ jQuery( document ).ready( function( $ ){
 		var defaults = {
 					"chosen_settings": {
 						"allow_single_deselect": true,
-						"inherit_select_classes": true
+						"inherit_select_classes": true,
+						"width": "400px",
+						"height": "500px"
 					}
 				};
 

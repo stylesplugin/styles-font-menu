@@ -37,11 +37,11 @@ jQuery( document ).ready( function( $ ){
 		plugin.settings = {};
 
 		plugin.init = function() {
-				plugin.settings = $.extend({}, defaults, options);
+			plugin.settings = $.extend({}, defaults, options);
 
-				plugin.populate_google_fonts();
+			plugin.populate_google_fonts();
 
-				$element.chosen( plugin.settings.chosen_settings );
+			$element.chosen( plugin.settings.chosen_settings );
 		};
 
 		plugin.populate_google_fonts = function() {
@@ -51,7 +51,30 @@ jQuery( document ).ready( function( $ ){
 				var selected = $(this).data('selected');
 				$(this).find( 'option[value="' + selected + '"]' ).attr('selected', 'selected');
 			} );
+		};
 
+		plugin.preview_font_change = function( $target_elements ) {
+			// Clear font-family if nothing selected
+			if ( '' === $element.val() ) {
+				$target_elements.css('font-family', '');
+				return true;
+			}
+
+			// Convert JSON string value to JSON object
+			var font = JSON.parse( $element.val() );
+
+			plugin.maybe_add_at_import_to_head( font );
+
+			// Update font-family
+			$target_elements.css('font-family', font.font_family );
+		};
+
+		plugin.maybe_add_at_import_to_head = function( font ) {
+			// Add @import to <head> if needed 
+			if ( undefined !== font.import_family ) {
+				var atImport = styles_google_options.import_template.replace( '@import_family@', font.import_family );
+				$( '<style>' ).append( atImport ).appendTo( 'head' );
+			}
 		};
 
 		plugin.init();

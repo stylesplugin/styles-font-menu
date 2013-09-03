@@ -25,25 +25,9 @@
 	(function($){
 
 		var $headings = $( 'h2,h3', '#styles-font-dropdown-readme' );
-
+		
 		$('select.styles-font-dropdown').change( function(){
-			if ( '' == $(this).val() ) {
-				$headings.css('font-family', '');
-				return true;
-			}
-
-			// Convert JSON string value to JSON object
-			var font = JSON.parse( $(this).val() );
-
-			// Add @import to <head> if needed 
-			if ( undefined !== font.import_family ) {
-				var atImport = styles_google_options.import_template.replace( '@import_family@', font.import_family );
-				$( '<style>' ).append( atImport ).appendTo( 'head' );
-			}
-
-			// Update font-family
-			$headings.css('font-family', font.font_family );
-
+			$(this).data('stylesFontDropdown').preview_font_change( $headings );
 		});
 
 	})(jQuery);

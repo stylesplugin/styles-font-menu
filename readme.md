@@ -12,7 +12,7 @@ To view a live demo of the menu in action, install and activate this WordPress p
 
 ## Including in plugins and themes
 
-Styles Font Dropdown has been packaged as a plugin only for testing purposes. In real world use, you should put it in your own theme or plugin, then include it with `include 'styles-font-dropdown/styles-font-dropdown.php';`
+Styles Font Dropdown has been packaged as a plugin only for testing purposes. In real world use, you should put it in your own theme or plugin, then include it with `include 'styles-font-dropdown/plugin.php';`
 
 ## Select Menu Values
 

@@ -62,6 +62,8 @@
 				$next = $option.next( 'option' );
 				if ( $next ) {
 					generate_preview( $next );
+				}else {
+					$('#generate-previews').after( '<br/>Done' );
 				}
 			} );
 		}

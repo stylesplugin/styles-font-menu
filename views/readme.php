@@ -1,4 +1,4 @@
-<div class="wrap styles-font-dropdown-readme">
+<div class="wrap" id="styles-font-dropdown-readme">
 
 	<?php screen_icon(); ?>
 	<h2><?php _e('Font Dropdown Menu', 'styles-font-dropdown'); ?></h2>
@@ -11,7 +11,7 @@
 </div>
 
 <style>
-	.styles-font-dropdown-readme ul {
+	#styles-font-dropdown-readme ul {
 		list-style-type: disc;
 		margin-left: 30px;
 	}

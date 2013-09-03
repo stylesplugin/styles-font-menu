@@ -27,6 +27,10 @@
 		var $headings = $( 'h2,h3', '#styles-font-dropdown-readme' );
 
 		$('select.styles-font-dropdown').change( function(){
+			if ( '' == $(this).val() ) {
+				$headings.css('font-family', '');
+				return true;
+			}
 
 			// Convert JSON string value to JSON object
 			var font = JSON.parse( $(this).val() );

@@ -7,14 +7,27 @@ require_once dirname(__FILE__) . '/styles-fonts.php';
 require_once dirname(__FILE__) . '/styles-standard-fonts.php';
 require_once dirname(__FILE__) . '/styles-google-fonts.php';
 
-add_action( 'init', create_function( '', 'new Styles_Font_Dropdown();'), 11 );
+add_action( 'init', 'Styles_Font_Dropdown::get_instance', 11 );
 
+/**
+ * Controller class
+ * Holds instances of models in vars
+ * Loads views from views/ directory
+ * 
+ * Follows the Singleton pattern. @see http://jumping-duck.com/tutorial/wordpress-plugin-structure/
+ * @example Access plugin instance with $font_dropdown = Styles_Font_Dropdown::get_instance();
+ */
 class Styles_Font_Dropdown {
 
 	/**
 	 * @var string The plugin version.
 	 */
 	var $version = '0.1';
+
+	/**
+	 * @var Styles_Font_Dropdown Instance of the class.
+	 */
+	protected static $instance = false;
 
 	/**
 	 * @var Styles_Font_Dropdown_Admin Methods for WordPress admin user interface.
@@ -53,7 +66,29 @@ class Styles_Font_Dropdown {
 	 */
 	var $scripts_printed = false;
 
+	/**
+	 * Don't use this. Use ::get_instance() instead.
+	 */
 	public function __construct() {
+		if ( !self::$instance ) {
+			$message = '<code>' . __CLASS__ . '</code> is a singleton.<br/> Please get an instantiate it with <code>' . __CLASS__ . '::get_instance();</code>';
+			wp_die( $message );
+		}
+	}
+
+	public static function get_instance() {
+		if ( !is_a( self::$instance, __CLASS__ ) ) {
+			self::$instance = true;
+			self::$instance = new self();
+			self::$instance->init();
+		}
+		return self::$instance;
+	}
+
+	/**
+	 * Initial setup. Called by get_instance.
+	 */
+	protected function init() {
 		$this->plugin_directory = site_url( str_replace( ABSPATH, '', dirname( dirname( __FILE__ ) ) ) );
 		$this->plugin_basename = plugin_basename( dirname( dirname( __FILE__ ) ) . '/plugin.php' );
 
@@ -66,7 +101,6 @@ class Styles_Font_Dropdown {
 		 * @example <code>do_action( 'styles_font_dropdown' );</code>
 		 */
 		add_action( 'styles_font_dropdown', array( $this, 'get_view_dropdown' ) );
-
 	}
 
 	public function print_scripts() {

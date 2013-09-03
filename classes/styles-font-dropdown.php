@@ -45,6 +45,11 @@ class Styles_Font_Dropdown {
 	var $google_fonts;
 
 	/**
+	 * @var Styles_Font_Preview Generate image preview of a font.
+	 */
+	var $font_preview;
+
+	/**
 	 * Set with site_url() because we might not be running as a plugin.
 	 * 
 	 * @var string URL for the styles-font-dropdown directory.
@@ -101,6 +106,11 @@ class Styles_Font_Dropdown {
 		 * @example <code>do_action( 'styles_font_dropdown' );</code>
 		 */
 		add_action( 'styles_font_dropdown', array( $this, 'get_view_dropdown' ) );
+
+		/**
+		 * Generate an image preview of a font
+		 */
+		add_action( 'init', array( $this, 'font_preview' ), 12 );
 	}
 
 	public function print_scripts() {
@@ -121,6 +131,16 @@ class Styles_Font_Dropdown {
 		wp_print_styles( array( 'styles-chosen' ) );
 
 		$this->scripts_printed = true;
+	}
+
+	public function font_preview() {
+		if ( !isset( $_GET['styles-font-preview'] ) ) {
+			return false;
+		}
+		if ( !class_exists( 'Styles_Font_Preview') ) {
+			require_once dirname( __FILE__ ) . '/styles-font-preview.php';
+		}
+		$this->font_preview = new Styles_Font_Preview( $this );
 	}
 
 	/**

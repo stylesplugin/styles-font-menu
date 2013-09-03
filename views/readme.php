@@ -21,7 +21,7 @@
 	jQuery(document).ready( function( $ ){
 		// Remove image of example output
 		$('h3.example-output').nextAll('h2').first().remove();
-		$('img[src*="example-output.png"]').remove();
+		$('img[src*="example-output.gif"]').remove();
 
 		// Remove directions on how to get to this demo
 		var $demo = $('h2:contains(Live Demo)');

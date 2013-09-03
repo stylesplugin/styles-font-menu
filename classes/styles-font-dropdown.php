@@ -23,9 +23,18 @@ class Styles_Font_Dropdown {
 	var $version = '0.1';
 
 	/**
-	 * @var string URL to the plugin directory
+	 * Set with site_url() because we might not be running as a plugin
+	 * 
+	 * @var string URL for the styles-font-dropdown directory
 	 */
 	var $plugin_directory;
+
+	/**
+	 * Intentionally inaccurate if we're running as a plugin.
+	 * 
+	 * @var string Plugin basename, only if we're running as a plugin.
+	 */
+	var $plugin_basename;
 
 	/**
 	 * print_scripts() runs as late as possible to avoid processing Google Fonts
@@ -35,13 +44,13 @@ class Styles_Font_Dropdown {
 	var $scripts_printed = false;
 
 	/**
-	 * @var string Example and readme at /wp-admin/plugins.php?page=$readme_page_slug
+	 * @var string Slug for readme at /wp-admin/plugins.php?page=$readme_page_slug
 	 */
 	var $readme_page_slug = 'styles-font-dropdown';
 
 	public function __construct() {
-		// We might not be running as a plugin, so we can't depend on plugins_url()
 		$this->plugin_directory = site_url( str_replace( ABSPATH, '', dirname( dirname( __FILE__ ) ) ) );
+		$this->plugin_basename = plugin_basename( dirname( dirname( __FILE__ ) ) );
 
 		$this->google_fonts = new Styles_Google_Fonts();
 		$this->standard_fonts = new Styles_Standard_Fonts();
@@ -52,7 +61,7 @@ class Styles_Font_Dropdown {
 		 */
 		add_action( 'styles_font_dropdown', array( $this, 'get_dropdown' ) );
 
-		// Example page
+		// Readme page
 		add_filter( 'plugin_row_meta', array( $this, 'plugin_row_meta' ), 10, 2 );
 		add_action( 'admin_menu', array( $this, 'add_readme_page' ) );
 
@@ -61,11 +70,10 @@ class Styles_Font_Dropdown {
 	/**
 	 * Add additional links to the plugin row
 	 * If we're not running as a plugin, this won't do anything,
-	 * because STYLES_FONT_DROPDOWN_BASENAME won't be a valid plugin path.
+	 * because plugin_basename won't match any active plugin path.
 	 */
 	public function plugin_row_meta( $meta, $basename ) {
-		FB::log(STYLES_FONT_DROPDOWN_BASENAME, 'STYLES_FONT_DROPDOWN_BASENAME');
-		if ( $basename == STYLES_FONT_DROPDOWN_BASENAME ) {
+		if ( $basename == $this->plugin_basename ) {
 			$meta[] = '<a href="' . network_admin_url( 'plugins.php?page=' . $this->readme_page_slug ) . '">How to use this plugin</a>';
 		}
 		return $meta;

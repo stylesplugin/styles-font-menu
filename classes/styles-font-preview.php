@@ -35,10 +35,11 @@ class Styles_Font_Preview {
 
 		$uploads = wp_upload_dir();
 		$this->fonts_directory = $uploads['basedir'] . '/styles-fonts';
+		$this->fonts_directory_url = $uploads['baseurl'] . '/styles-fonts';
 
 		$this->get_font();
 
-		$this->generate_image();
+		$this->get_image();
 	}
 
 	public function get_font() {
@@ -71,10 +72,23 @@ class Styles_Font_Preview {
 
 		$nicename = strtolower( preg_replace( '/[^a-zA-Z0-9]/', '', $this->font_family ) );
 
-		$this->font_filename =  "$nicename-{$this->font_variant}.ttf";
-		$this->font_path = $this->fonts_directory . '/' . $this->font_filename;
+		$this->font_filename =  "$nicename-{$this->font_variant}";
+		$this->font_ttf_path = $this->fonts_directory . '/ttf/' . $this->font_filename . '.ttf';
+		$this->font_png_path = $this->fonts_directory . '/png/' . $this->font_filename . '.png';
+		$this->font_png_url = $this->fonts_directory_url . '/png/' . $this->font_filename . '.png';
+
+		$this->font_filename = $this->font_filename . '.ttf';
 
 		$this->maybe_get_remote_font();
+	}
+
+	public function get_image() {
+		if ( file_exists( $this->font_png_path ) ) {
+			wp_redirect( $this->font_png_url );
+			exit;
+		}
+
+		$this->generate_image();
 	}
 
 	public function generate_image() {
@@ -86,18 +100,41 @@ class Styles_Font_Preview {
 		$background = imageColorAllocate($image, $background_color[0], $background_color[1], $background_color[2]);
 		$foreground = imageColorAllocate($image, $font_color[0], $font_color[1], $font_color[2]);
 
-		imagettftext($image, $font_size, 0, $left_margin, $font_baseline, $foreground, $this->font_path, $this->font_family );
+		imagettftext($image, $font_size, 0, $left_margin, $font_baseline, $foreground, $this->font_ttf_path, $this->font_family );
+
+		ob_start();
+		imagePNG($image);
+		$image = ob_get_clean();
+
+		// Save image file
+		$dir = dirname( $this->font_png_path );
+
+		if ( !is_dir( $dir ) && !wp_mkdir_p( $dir ) ) { 
+			wp_die( "Please check permissions. Could not create directory $dir" );
+		}
+
+		if ( !function_exists('WP_Filesystem')) { require ABSPATH . 'wp-admin/includes/file.php'; }
+		global $wp_filesystem; WP_Filesystem();
+		$image_file = $wp_filesystem->put_contents( $this->font_png_path, $image, FS_CHMOD_FILE ); // predefined mode settings for WP files
+
+		if ( $image_file ) {
+			return $image_file;
+		}else {
+			wp_die( "Please check permissions. Could not write image to $dir" );
+		}
 
 		header("Content-type: image/png");
-		imagePNG($image);
+		echo $image;
 
 		exit;
 	}
 
 	public function maybe_get_remote_font() {
-		if ( file_exists( $this->font_path ) ) {
-			return $this->font_path;
+		if ( file_exists( $this->font_ttf_path ) ) {
+			return $this->font_ttf_path;
 		}
+
+		$dir = dirname( $this->font_ttf_path );
 
 		if ( !function_exists('WP_Filesystem')) { require ABSPATH . 'wp-admin/includes/file.php'; }
 		global $wp_filesystem; WP_Filesystem();
@@ -106,7 +143,7 @@ class Styles_Font_Preview {
 			wp_die( "Please check permissions. Could not create directory $dir" );
 		}
 
-		$font_file = $wp_filesystem->put_contents( $this->font_path, $this->get_remote_font(), FS_CHMOD_FILE ); // predefined mode settings for WP files
+		$font_file = $wp_filesystem->put_contents( $this->font_ttf_path, $this->get_remote_font(), FS_CHMOD_FILE ); // predefined mode settings for WP files
 
 		if ( $font_file ) {
 			return $font_file;

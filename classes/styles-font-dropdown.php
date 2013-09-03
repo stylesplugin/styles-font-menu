@@ -43,10 +43,10 @@ class Styles_Font_Dropdown {
 		$this->standard_fonts = new Styles_Standard_Fonts();
 
 		/**
-		 * Output dropdown menu anywhere styles_fonts_dropdown action is called.
-		 * @example <code>do_action( 'styles_fonts_dropdown' );</code>
+		 * Output dropdown menu anywhere styles_font_dropdown action is called.
+		 * @example <code>do_action( 'styles_font_dropdown' );</code>
 		 */
-		add_action( 'styles_fonts_dropdown', array( $this, 'get_dropdown' ) );
+		add_action( 'styles_font_dropdown', array( $this, 'get_dropdown' ) );
 
 		// Example page
 		add_filter( 'plugin_row_meta', array( $this, 'plugin_row_meta' ), 10, 2 );

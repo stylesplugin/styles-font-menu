@@ -4,7 +4,7 @@
 	<h2><?php _e('Font Dropdown Menu', 'styles-font-dropdown'); ?></h2>
 
 	<h3 class="example-output">Example output</h3>
-	<p><?php do_action( 'styles_fonts_dropdown' ); ?></p>
+	<p><?php do_action( 'styles_font_dropdown' ); ?></p>
 
 	<?php echo Markdown( file_get_contents( dirname( dirname( __FILE__ ) ) . '/readme.md' ) ); ?>
 

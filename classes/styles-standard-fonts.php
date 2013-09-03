@@ -6,6 +6,30 @@ class Styles_Standard_Fonts extends Styles_Fonts {
 	protected $families;
 
 	/**
+	 * @var array Mult-dimensional array containing necessary font metadata
+	 */
+	protected $options = array(
+		'import_template' => false,
+		'fonts' => array(),
+	);
+
+	/**
+	 * Fires when accessing $this->options from outside the class.
+	 */
+	public function get_options() {
+		if ( !empty( $this->options['fonts'] ) ) { return $this->options; }
+
+		foreach ( (array) $this->fonts as $name => $family ){
+			$this->options['fonts'][] = array(
+				'font_family' => $family,
+				'font_name' => $name,
+			);
+		}
+
+		return $this->options;
+	}
+
+	/**
 	 * Fires when accessing $this->families from outside the class.
 	 */
 	public function get_families() {

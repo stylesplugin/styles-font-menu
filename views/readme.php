@@ -18,7 +18,39 @@
 </style>
 
 <script>
-	jQuery(document).ready( function( $ ){
+
+	/**
+	 * Change heading font-family on menu change event
+	 */
+	(function($){
+
+		var $headings = $( 'h2,h3', '#styles-font-dropdown-readme' );
+
+		$('select.styles-font-dropdown').change( function(){
+
+			// Convert JSON string value to JSON object
+			var font = JSON.parse( $(this).val() );
+
+			// Add @import to <head> if needed 
+			if ( undefined !== font.import_family ) {
+				var atImport = styles_google_options.import_template.replace( '@import_family@', font.import_family );
+				$( '<style>' ).append( atImport ).appendTo( 'head' );
+			}
+
+			// Update font-family
+			$headings.css('font-family', font.font_family );
+
+		});
+
+	})(jQuery);
+
+	/**
+	 * Modify readme.md content:
+	 *  - Hide directions on how to get to this page
+	 *  - Hide menu screenshot (live demo displayed above)
+	 */
+	(function($){
+
 		// Remove image of example output
 		$('h3.example-output').nextAll('h2').first().remove();
 		$('img[src*="example-output.gif"]').remove();
@@ -28,22 +60,6 @@
 		$demo.nextUntil('h2').remove();
 		$demo.remove();
 
-		$('select.styles-font-dropdown').change( function(){
+	})(jQuery);
 
-			var font = $(this).val();
-			var name = $(this).find('option').filter(":selected").text();
-			var $headings = $('#icon-plugins').nextAll('h2,h3');
-
-			if ( -1 != font.indexOf(':') ) {
-				// Google Font
-				var atImport = "@import url(//fonts.googleapis.com/css?family=@SRC@);\r";
-				atImport = atImport.replace( '@SRC@', font );
-				$('head').append( '<style>' + atImport + '</style>' );
-				$headings.css('font-family', name );
-			}else {
-				// Standard Font
-				$headings.css('font-family', font );
-			}
-		});
-	});
 </script>

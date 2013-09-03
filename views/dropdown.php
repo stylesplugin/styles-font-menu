@@ -7,8 +7,8 @@
 	<option value=""></option>
 
 	<optgroup label="Standard Fonts">
-		<?php foreach ( $this->standard_fonts->families as $name => $font_stack ): ?>
-			<option value="<?php echo $font_stack ?>"><?php echo $name ?></option>
+		<?php foreach ( $this->standard_fonts->options['fonts'] as $font ): ?>
+			<option value="<?php echo esc_attr( json_encode($font) ) ?>"><?php echo $font['font_name'] ?></option>
 		<?php endforeach; ?>
 	</optgroup>
 

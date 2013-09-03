@@ -21,6 +21,28 @@
 	.styles-font-dropdown .chosen-results {
 		max-height: 400px !important;
 	}
+
+.styles-font-dropdown .arial, .styles-font-dropdown .bookman, .styles-font-dropdown .centurygothic, .styles-font-dropdown .comicsansms, .styles-font-dropdown .courier, .styles-font-dropdown .garamond, .styles-font-dropdown .georgia, .styles-font-dropdown .helvetica, .styles-font-dropdown .lucidagrande, .styles-font-dropdown .palatino, .styles-font-dropdown .tahoma, .styles-font-dropdown .times, .styles-font-dropdown .trebuchetms, .styles-font-dropdown .verdana {
+	font-size: 48px;
+	height:64px;
+	line-height: 64px !important;
+	white-space: nowrap;
+}
+
+.styles-font-dropdown .arial { font-family: Arial, Helvetica, sans-serif; }
+.styles-font-dropdown .bookman { font-family: Bookman, Palatino, Georgia, serif; }
+.styles-font-dropdown .centurygothic { font-family: "Century Gothic", Helvetica, Arial, sans-serif; }
+.styles-font-dropdown .comicsansms { font-family: "Comic Sans MS", Arial, sans-serif; }
+.styles-font-dropdown .courier { font-family: Courier, monospace; }
+.styles-font-dropdown .garamond { font-family: Garamond, Palatino, Georgia, serif; }
+.styles-font-dropdown .georgia { font-family: Georgia, Times, serif; }
+.styles-font-dropdown .helvetica { font-family: Helvetica, Arial, sans-serif; }
+.styles-font-dropdown .lucidagrande { font-family: "Lucida Sans Unicode",Tahoma,Verdana,sans-serif; }
+.styles-font-dropdown .palatino { font-family: Palatino, Georgia, serif; }
+.styles-font-dropdown .tahoma { font-family: Tahoma, Verdana, Helvetica, sans-serif; }
+.styles-font-dropdown .times { font-family: Times, Georgia, serif; }
+.styles-font-dropdown .trebuchetms { font-family: "Trebuchet MS", Tahoma, Helvetica, sans-serif; }
+.styles-font-dropdown .verdana { font-family: Verdana, Tahoma, sans-serif; }
 </style>
 
 <script>

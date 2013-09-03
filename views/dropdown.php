@@ -8,7 +8,8 @@
 
 	<optgroup label="Standard Fonts">
 		<?php foreach ( $this->standard_fonts->options['fonts'] as $font ): ?>
-			<option value="<?php echo esc_attr( json_encode($font) ) ?>"><?php echo $font['font_name'] ?></option>
+			<?php $class = strtolower( preg_replace( '/[^a-zA-Z0-9]/', '', $font['font_name'] ) ); ?>
+			<option class="<?php echo $class ?>" value="<?php echo esc_attr( json_encode($font) ) ?>"><?php echo $font['font_name'] ?></option>
 		<?php endforeach; ?>
 	</optgroup>
 

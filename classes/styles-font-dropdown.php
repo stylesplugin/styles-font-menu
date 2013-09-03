@@ -6,7 +6,7 @@ require_once dirname(__FILE__) . '/styles-fonts.php';
 require_once dirname(__FILE__) . '/styles-standard-fonts.php';
 require_once dirname(__FILE__) . '/styles-google-fonts.php';
 
-add_action( 'admin_menu', create_function( '', 'new Styles_Font_Dropdown();') );
+add_action( 'init', create_function( '', 'new Styles_Font_Dropdown();'), 11 );
 
 class Styles_Font_Dropdown {
 
@@ -54,7 +54,7 @@ class Styles_Font_Dropdown {
 
 		// Example page
 		add_filter( 'plugin_row_meta', array( $this, 'plugin_row_meta' ), 10, 2 );
-		add_action( 'admin_menu', array( $this, 'add_readme_page' ), 11 );
+		add_action( 'admin_menu', array( $this, 'add_readme_page' ) );
 
 	}
 
@@ -64,6 +64,7 @@ class Styles_Font_Dropdown {
 	 * because STYLES_FONT_DROPDOWN_BASENAME won't be a valid plugin path.
 	 */
 	public function plugin_row_meta( $meta, $basename ) {
+		FB::log(STYLES_FONT_DROPDOWN_BASENAME, 'STYLES_FONT_DROPDOWN_BASENAME');
 		if ( $basename == STYLES_FONT_DROPDOWN_BASENAME ) {
 			$meta[] = '<a href="' . network_admin_url( 'plugins.php?page=' . $this->readme_page_slug ) . '">How to use this plugin</a>';
 		}

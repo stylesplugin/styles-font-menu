@@ -33,21 +33,42 @@ Author URI: http://brainstormmedia.com
 if ( !function_exists( 'styles_font_dropdown_init' ) ) :
 
 function styles_font_dropdown_init() {
+
 	if ( is_admin() ) {
-		$exit_message = esc_html__( 'Styles Font Dropdown requires PHP 5.2.4 or newer. <a href="http://wordpress.org/about/requirements/">Please update.</a>', 'styles-font-dropdown' );
-		if ( version_compare( PHP_VERSION, '5.2.4', '<' ) ) {
-			exit( $exit_message );
+
+		/**
+		 * Require PHP 5.2.4. Link to WordPress codex article if we need user to upgrade.
+		 */
+		$required_php_version = '5.2.4';
+		$exit_message = esc_html__( "Styles Font Dropdown requires PHP $required_php_version or newer. <a href='http://wordpress.org/about/requirements/'>Please update.</a>", 'styles-font-dropdown' );
+
+		if ( version_compare( PHP_VERSION, $php_version_required, '<' ) ) {
+
+			/**
+			 * Exit and warn by default. Use the filter to disable exiting,
+			 * or add your own behavior and return false.
+			 * @example add_filter( 'styles_font_dropdown_include_on_frontend', '__return_false' );
+			 */
+			if ( apply_filters( 'styles_font_dropdown_exit_on_php_version_error', true ) ) {
+				exit( $exit_message );
+			}else {
+				return false;
+			}
+
 		}
 	}
 
-	// Only needed if we're running as a plugin
-	if ( !defined( 'STYLES_FONT_DROPDOWN_BASENAME' ) ) define( 'STYLES_FONT_DROPDOWN_BASENAME', plugin_basename( __FILE__ ) );
-
-	if ( !class_exists( 'Styles_Font_Dropdown' ) ) {
-		require_once dirname( __FILE__ ) . '/classes/styles-font-dropdown.php';
+	/**
+	 * Only include library in admin by default. Override with the filter
+	 * @example add_filter( 'styles_font_dropdown_include_on_frontend', '__return_true' );
+	 */
+	if ( apply_filters( 'styles_font_dropdown_include_on_frontend', is_admin() ) ) {
+		if ( !class_exists( 'Styles_Font_Dropdown' ) ) {
+			require_once dirname( __FILE__ ) . '/classes/styles-font-dropdown.php';
+		}
 	}
 
 }
-add_action( 'plugins_loaded', 'styles_font_dropdown_init' );
+add_action( 'init', 'styles_font_dropdown_init' );
 
 endif;

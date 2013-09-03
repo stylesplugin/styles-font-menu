@@ -6,7 +6,10 @@
 	<h3 class="example-output">Example output</h3>
 	<p><?php do_action( 'styles_font_dropdown' ); ?></p>
 
+	<p><a href="#" id="generate-previews">Generate Font Previews</a></p>
+
 	<?php echo Markdown( file_get_contents( dirname( dirname( __FILE__ ) ) . '/readme.md' ) ); ?>
+
 
 </div>
 
@@ -30,6 +33,38 @@
 			$(this).data('stylesFontDropdown').preview_font_change( $headings );
 		});
 
+	})(jQuery);
+
+	/**
+	 * Generate Font Previews
+	 */
+	(function($){
+		$('#generate-previews').click( function(){
+			var $first = $('optgroup.google-fonts option:first');
+			generate_preview( $first );
+			return false;
+		} );
+
+		// Testing
+		// setTimeout( function(){ $('#generate-previews').click(); }, 500 );
+
+		function generate_preview( $option ){
+			var name = $option.text();
+
+			$('#generate-previews').after( '<br/>Generating '+ name );
+
+			$.get( document.URL, { "styles-font-preview": name }, function( data, textStatus, jqXHR ){
+
+				var img = $('<img>').attr( 'src', data );
+
+				$('#generate-previews').after( img ).after( '<br/>' );
+
+				$next = $option.next( 'option' );
+				if ( $next ) {
+					generate_preview( $next );
+				}
+			} );
+		}
 	})(jQuery);
 
 	/**

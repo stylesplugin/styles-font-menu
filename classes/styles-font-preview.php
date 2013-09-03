@@ -22,10 +22,10 @@ class Styles_Font_Preview {
 	 */
 	var $preview_attributes = array(
 		'font_size' => 48,
-		'font_baseline' => 54, // y-coordinate to place font baseline
+		'font_baseline' => 64, // y-coordinate to place font baseline
 		'left_margin' => 5,
-		'width' => 300,
-		'height' => 75,
+		'width' => 500,
+		'height' => 90,
 		'background_color' => array( 255, 255, 255 ),
 		'font_color' => array( 0, 0, 0 ),
 	);
@@ -40,6 +40,8 @@ class Styles_Font_Preview {
 		$this->get_font();
 
 		$this->get_image();
+
+		exit;
 	}
 
 	public function get_font() {
@@ -65,7 +67,12 @@ class Styles_Font_Preview {
 				wp_die( 'Variant not found. Variants: <ul><li>' . $variants . '</li></ul>' );
 			}
 		}else {
-			$this->font_variant = 'regular';
+			if ( in_array( 'regular', (array) $this->font->files ) ) {
+				$this->font_variant = 'regular';
+			}else {
+				$variants = array_keys( (array) $this->font->files );
+				$this->font_variant = $variants[0];
+			}
 		}
 
 		$this->font_url = $this->font->files->{$this->font_variant};
@@ -84,8 +91,7 @@ class Styles_Font_Preview {
 
 	public function get_image() {
 		if ( file_exists( $this->font_png_path ) ) {
-			wp_redirect( $this->font_png_url );
-			exit;
+			exit( $this->font_png_url );
 		}
 
 		$this->generate_image();

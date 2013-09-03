@@ -23,16 +23,20 @@ class Styles_Font_Dropdown {
 	var $version = '0.1';
 
 	/**
-	 * URL to the plugin directory
+	 * @var string URL to the plugin directory
 	 */
 	var $plugin_directory;
 
 	/**
-	 * register_scripts() runs as late as possible to avoid processing Google Fonts
+	 * print_scripts() runs as late as possible to avoid processing Google Fonts
 	 * This prevents running multiple times
+	 * @var bool Whether we have already registered scripts or not.
 	 */
-	var $scripts_registered = false;
+	var $scripts_printed = false;
 
+	/**
+	 * @var string Example and readme at /wp-admin/plugins.php?page=$readme_page_slug
+	 */
 	var $readme_page_slug = 'styles-font-dropdown';
 
 	public function __construct() {
@@ -66,8 +70,8 @@ class Styles_Font_Dropdown {
 		return $meta;
 	}
 
-	public function register_scripts() {
-		if ( $this->scripts_registered ) { return false; }
+	public function print_scripts() {
+		if ( $this->scripts_printed ) { return false; }
 
 		wp_register_script( 'styles-chosen', $this->plugin_directory . '/js/chosen/chosen.jquery.min.js', array( 'jquery' ), $this->version );
 		wp_register_script( 'styles-fonts-dropdown', $this->plugin_directory . '/js/styles-fonts-dropdown.js', array( 'jquery', 'styles-chosen' ), $this->version );
@@ -78,16 +82,26 @@ class Styles_Font_Dropdown {
 		// then appending them to all <select> elements client-side
 		wp_localize_script( 'styles-fonts-dropdown', 'styles_google_families', $this->google_fonts->families );
 
-		$this->scripts_registered = true;
+		// Output scripts and dependencies
+		// Tracks whether dependencies have already been output
+		wp_print_scripts( array( 'styles-fonts-dropdown' ) );
+		wp_print_styles( array( 'styles-chosen' ) );
+
+		$this->scripts_printed = true;
 	}
 
 	/**
-	 * Make sure the output action works. Testing only.
+	 * Display readme and working example in WordPress admin
+	 * Does not add a menu item
+	 * @link /wp-admin/plugins.php?page=styles-font-dropdown
 	 */
 	public function add_readme_page() {
 		add_submenu_page( null, 'Font Dropdown Menu', 'Font Dropdown Menu', 'manage_options', $this->readme_page_slug, array( $this, 'readme_page' ) );
 	}
 
+	/**
+	 * Display views/readme.php, which modifies readme.md to show a working example.
+	 */
 	public function readme_page() {
 		if ( !function_exists( 'Markdown' ) ) {
 			require_once dirname( __FILE__ ) . '/markdown/markdown.php';
@@ -95,16 +109,18 @@ class Styles_Font_Dropdown {
 		$this->get_view( 'readme' );
 	}
 
+	/**
+	 * Display views/dropdown.php
+	 */
 	public function get_dropdown() {
 		$this->get_view( 'dropdown' );
 	}
 
+	/**
+	 * Display any view from the views/ directory.
+	 * Allows views to have access to $this
+	 */
 	public function get_view( $file = 'dropdown' ) {
-		// Load Google Fonts and scripts as late as possible
-		$this->register_scripts();
-		wp_print_scripts( array( 'styles-fonts-dropdown' ) );
-		wp_print_styles( array( 'styles-chosen' ) );
-
 		$file = dirname( dirname( __FILE__ ) ) . "/views/$file.php";
 		if ( file_exists( $file ) ) {
 			include $file;

@@ -1,3 +1,8 @@
+<?php
+	// Load Google Fonts and scripts only once and as late as possible
+	$this->print_scripts();
+?>
+
 <select class="styles-font-dropdown" data-placeholder="Select a Font...">
 	<option value=""></option>
 

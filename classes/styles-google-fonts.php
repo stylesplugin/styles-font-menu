@@ -78,6 +78,11 @@ class Styles_Google_Fonts extends Styles_Fonts {
 
 		foreach ( (array) $this->get_fonts()->items as $font ){
 
+			// Exclude non-latin fonts
+			if ( !in_array('latin', $font->subsets ) ) {
+				continue;
+			}
+
 			$import_family = str_replace( ' ', '+', $font->family ) . ':' . implode( ',', $font->variants );
 			
 			$this->options['fonts'][] = array(

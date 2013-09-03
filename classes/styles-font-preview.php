@@ -123,14 +123,14 @@ class Styles_Font_Preview {
 		global $wp_filesystem; WP_Filesystem();
 		$image_file = $wp_filesystem->put_contents( $this->font_png_path, $image, FS_CHMOD_FILE ); // predefined mode settings for WP files
 
-		if ( $image_file ) {
-			return $image_file;
-		}else {
+		if ( !$image_file ) {
 			wp_die( "Please check permissions. Could not write image to $dir" );
 		}
 
-		header("Content-type: image/png");
-		echo $image;
+		// header("Content-type: image/png");
+		// echo $image;
+
+		echo $this->font_png_url;
 
 		exit;
 	}

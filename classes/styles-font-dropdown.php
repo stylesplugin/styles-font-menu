@@ -20,7 +20,7 @@ class Styles_Font_Dropdown {
 	 */
 	var $google_fonts;
 
-	var $version = '1.0';
+	var $version = '0.1';
 
 	/**
 	 * URL to the plugin directory

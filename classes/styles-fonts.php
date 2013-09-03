@@ -3,6 +3,7 @@
 abstract class Styles_Fonts {
 	protected $fonts;
 	protected $families;
+	protected $options;
 
 	/**
 	 * If client tries to access variables directly, pass to get() method

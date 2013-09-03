@@ -20,7 +20,13 @@ class Styles_Google_Fonts extends Styles_Fonts {
 	 */
 	protected $families;
 
-	protected $css_import_template = "@import url(//fonts.googleapis.com/css?family=@SRC@);\r";
+	/**
+	 * @var array Mult-dimensional array containing necessary font metadata
+	 */
+	protected $options = array(
+		'import_template' => "@import url(//fonts.googleapis.com/css?family=@import_family@);\r",
+		'fonts' => array(),
+	);
 
 	/**
 	 * @var string path to JSON backup of Google API response. In case API fails or is unavailable.
@@ -64,6 +70,42 @@ class Styles_Google_Fonts extends Styles_Fonts {
 		return $this->fonts;
 	}
 
+	/**
+	 * Fires when accessing $this->options from outside the class.
+	 */
+	public function get_options() {
+		if ( !empty( $this->options['fonts'] ) ) { return $this->options; }
+
+		foreach ( (array) $this->get_fonts()->items as $font ){
+
+			$import_family = str_replace( ' ', '+', $font->family ) . ':' . implode( ',', $font->variants );
+			
+			$this->options['fonts'][] = array(
+				'import_family' => $import_family,
+				'font_family' => $font->family,
+			);
+		}
+
+		return $this->options;
+	}
+
+	/**
+	 * Fires when accessing $this->families from outside the class.
+	 */
+	public function get_families() {
+		if ( !empty( $this->families ) ) { return $this->families; }
+
+		foreach ( (array) $this->get_fonts()->items as $font ){
+			$variants = str_replace( ' ', '+', $font->family ) . ':' . implode( ',', $font->variants );
+			$this->families[ $font->family ] = $variants;
+		}
+
+		return $this->families;
+	}
+
+	/**
+	 * Connect to the remote Google API. Fall back to get_api_fallback on failure.
+	 */
 	public function remote_get_google_api() {
 		// API key must be set with this filter
 		$api_key = apply_filters( 'styles_google_font_api', '' );
@@ -80,20 +122,6 @@ class Styles_Google_Fonts extends Styles_Fonts {
 		if ( is_a( $response, 'WP_Error') ) { return $this->get_api_fallback(); }
 
 		return json_decode( $response['body'] );
-	}
-
-	/**
-	 * Fires when accessing $this->families from outside the class.
-	 */
-	public function get_families() {
-		if ( !empty( $this->families ) ) { return $this->families; }
-
-		foreach ( (array) $this->get_fonts()->items as $font ){
-			$variants = str_replace( ' ', '+', $font->family ) . ':' . implode( ',', $font->variants );
-			$this->families[ $font->family ] = $variants;
-		}
-
-		return $this->families;
 	}
 
 	/**

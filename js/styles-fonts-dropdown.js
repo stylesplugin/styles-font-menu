@@ -4,7 +4,7 @@ jQuery( document ).ready( function( $ ){
 
 });
 
-(function( $, styles_google_families ) {
+(function( $, styles_google_options ) {
 	$.stylesFontDropdown = function(element, options) {
 
 		var plugin = this;
@@ -12,7 +12,7 @@ jQuery( document ).ready( function( $ ){
 		plugin.settings = {};
 
 		var $element = $(element),
-				 element = element;
+			   element = element;
 
 		plugin.init = function() {
 				plugin.settings = $.extend({}, defaults, options);
@@ -23,32 +23,34 @@ jQuery( document ).ready( function( $ ){
 					"allow_single_deselect": true,
 					"inherit_select_classes": true
 				});
-		}
+		};
 
 		plugin.populate_google_fonts = function() {
 			var google_options = "<optgroup class='google-fonts' label='Google Fonts'>";
-			$.each( styles_google_families, function( family, variants ){
-				google_options += "<option value='" + variants + "'>" + family + "</option>";
+
+			$.each( styles_google_options.fonts, function( i, options ){
+				google_options += "<option value='" + JSON.stringify(options) + "'>" + options.font_family + "</option>";
 			});
-			google_options += "</optgroup>"
+			google_options += "</optgroup>";
 
 			$element.append( google_options ).each( function(){
 				var selected = $(this).data('selected');
 				$(this).find( 'option[value="' + selected + '"]' ).attr('selected', 'selected');
 			} );
-		}
+
+		};
 
 		plugin.init();
 
-	}
+	};
 
 	$.fn.stylesFontDropdown = function(options) {
 		return this.each(function() {
-			if (undefined == $(this).data('stylesFontDropdown')) {
+			if (undefined === $(this).data('stylesFontDropdown')) {
 				var plugin = new $.stylesFontDropdown(this, options);
 				$(this).data('stylesFontDropdown', plugin);
 			}
 		});
-	}
+	};
 
-})(jQuery, styles_google_families );
+})(jQuery, styles_google_options );

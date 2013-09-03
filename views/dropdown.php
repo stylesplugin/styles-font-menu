@@ -13,7 +13,7 @@
 	</optgroup>
 
 	<?php /* 
-		Google Fonts loaded by styles-fonts-dropdown.js
+		Google Fonts loaded by styles-font-dropdown.js
 
 		This is done for performance reasons. The list is 600+ fonts.
 		In cases where the dropdown is used multiple times on one page,

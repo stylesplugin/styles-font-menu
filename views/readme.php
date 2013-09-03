@@ -11,7 +11,7 @@
 </div>
 
 <style>
-	#styles-font-dropdown-readme ul {
+	#styles-font-dropdown-readme > ul {
 		list-style-type: disc;
 		margin-left: 30px;
 	}

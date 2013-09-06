@@ -37,8 +37,7 @@ jQuery( document ).ready( function( $ ){
 					"chosen_settings": {
 						"allow_single_deselect": true,
 						"inherit_select_classes": true,
-						"width": "400px",
-						"height": "500px"
+						"width": "400px"
 					}
 				};
 

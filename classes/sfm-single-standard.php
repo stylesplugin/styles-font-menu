@@ -1,6 +1,6 @@
 <?php
 
-class SFM_Font_Standard {
+class SFM_Single_Standard {
 
 	/**
 	 * @var string Name of the font

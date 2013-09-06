@@ -3,11 +3,11 @@
 if ( !class_exists( 'SFM_Plugin' ) ) :
 
 require_once dirname(__FILE__) . '/sfm-admin.php';
-require_once dirname(__FILE__) . '/sfm-font-group.php';
-require_once dirname(__FILE__) . '/sfm-font-group-standard.php';
-require_once dirname(__FILE__) . '/sfm-font-group-google.php';
-require_once dirname(__FILE__) . '/sfm-font-standard.php';
-require_once dirname(__FILE__) . '/sfm-font-google.php';
+require_once dirname(__FILE__) . '/sfm-group.php';
+require_once dirname(__FILE__) . '/sfm-group-standard.php';
+require_once dirname(__FILE__) . '/sfm-group-google.php';
+require_once dirname(__FILE__) . '/sfm-single-standard.php';
+require_once dirname(__FILE__) . '/sfm-single-google.php';
 
 add_action( 'init', 'SFM_Plugin::get_instance', 11 );
 
@@ -42,12 +42,12 @@ class SFM_Plugin {
 	var $admin;
 
 	/**
-	 * @var SFM_Font_Group_Standard Web standard font families and CSS font stacks.
+	 * @var SFM_Group_Standard Web standard font families and CSS font stacks.
 	 */
 	var $standard_fonts;
 
 	/**
-	 * @var SFM_Font_Group_Google Connects to Google Font API.
+	 * @var SFM_Group_Google Connects to Google Font API.
 	 */
 	var $google_fonts;
 
@@ -105,8 +105,8 @@ class SFM_Plugin {
 		$this->plugin_basename = plugin_basename( dirname( dirname( __FILE__ ) ) . '/plugin.php' );
 
 		$this->admin = new SFM_Admin( $this );
-		$this->google_fonts = new SFM_Font_Group_Google();
-		$this->standard_fonts = new SFM_Font_Group_Standard();
+		$this->google_fonts = new SFM_Group_Google();
+		$this->standard_fonts = new SFM_Group_Standard();
 
 		/**
 		 * Output dropdown menu anywhere styles_font_menu action is called.

@@ -34,7 +34,7 @@ class SFM_Plugin {
 	/**
 	 * @var string Class to apply to menu element and prefix to selectors.
 	 */
-	protected $menu_class = 'sfm';
+	public $menu_class = 'sfm';
 
 	/**
 	 * @var SFM_Admin Methods for WordPress admin user interface.
@@ -137,6 +137,10 @@ class SFM_Plugin {
 		// Tracks whether dependencies have already been output
 		wp_print_scripts( array( 'styles-font-menu' ) );
 		wp_print_styles( array( 'styles-chosen' ) );
+
+		// Generated scripts for font previews
+		FB::log($this->standard_fonts->get_menu_css(), '$this->standard_fonts->get_menu_css()');
+		echo '<style>' . $this->standard_fonts->get_menu_css() . '</style>';
 
 		$this->scripts_printed = true;
 	}

@@ -103,13 +103,12 @@ class SFM_Single_Standard {
 
 	public function get_selector(){
 		$plugin = SFM_Plugin::get_instance();
-		$prefix = $plugin->get_menu_class();
 
-		return '.' . $prefix . ' .' . $this->get_classname();
+		return '.' . $plugin->menu_class . ' .' . $this->get_classname();
 	}
 
 	public function get_menu_css() {
-		return $this->get_selector() . "{font-family:{$this->family}" . PHP_EOL;
+		return $this->get_selector() . "{font-family:{$this->family}}" . PHP_EOL;
 	}
 
 }

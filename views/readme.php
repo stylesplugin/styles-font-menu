@@ -34,20 +34,6 @@
 		 background-repeat: no-repeat;
 	}
 
-	.sfm .arial { font-family: Arial, Helvetica, sans-serif; }
-	.sfm .bookman { font-family: Bookman, Palatino, Georgia, serif; }
-	.sfm .centurygothic { font-family: "Century Gothic", Helvetica, Arial, sans-serif; }
-	.sfm .comicsansms { font-family: "Comic Sans MS", Arial, sans-serif; }
-	.sfm .courier { font-family: Courier, monospace; }
-	.sfm .garamond { font-family: Garamond, Palatino, Georgia, serif; }
-	.sfm .georgia { font-family: Georgia, Times, serif; }
-	.sfm .helvetica { font-family: Helvetica, Arial, sans-serif; }
-	.sfm .lucidagrande { font-family: "Lucida Sans Unicode",Tahoma,Verdana,sans-serif; }
-	.sfm .palatino { font-family: Palatino, Georgia, serif; }
-	.sfm .tahoma { font-family: Tahoma, Verdana, Helvetica, sans-serif; }
-	.sfm .times { font-family: Times, Georgia, serif; }
-	.sfm .trebuchetms { font-family: "Trebuchet MS", Tahoma, Helvetica, sans-serif; }
-	.sfm .verdana { font-family: Verdana, Tahoma, sans-serif; }
 </style>
 
 <script>

@@ -38,7 +38,7 @@ class SFM_Admin {
 	 * @link /wp-admin/plugins.php?page=styles-font-menu
 	 */
 	public function add_readme_page() {
-		add_submenu_page( null, 'Font Dropdown Menu', 'Font Dropdown Menu', 'manage_options', $this->readme_page_slug, array( $this, 'get_view_readme' ) );
+		add_submenu_page( null, 'Font Menu', 'Font Menu', 'manage_options', $this->readme_page_slug, array( $this, 'get_view_readme' ) );
 	}
 
 	/**

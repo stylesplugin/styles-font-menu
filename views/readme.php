@@ -1,7 +1,7 @@
 <div class="wrap" id="styles-font-menu-readme">
 
 	<?php screen_icon(); ?>
-	<h2><?php _e('Font Dropdown Menu', 'styles-font-menu'); ?></h2>
+	<h2><?php _e('Font Menu', 'styles-font-menu'); ?></h2>
 
 	<p><a href="#" id="generate-previews">Generate Font Previews</a></p>
 

@@ -3,7 +3,7 @@
 class SFM_Image_Preview {
 
 	/**
-	 * @var Styles_Font_Dropdown Pointer to parent/wrapper object.
+	 * @var SF_Plugin Pointer to parent/wrapper object.
 	 */
 	var $plugin;
 

@@ -1,9 +1,9 @@
 <?php
 
-class Styles_Font_Dropdown_Admin {
+class Styles_Font_Menu_Admin {
 
 	/**
-	 * @var Styles_Font_Dropdown Pointer to parent/wrapper object.
+	 * @var Styles_Font_Menu Pointer to parent/wrapper object.
 	 */
 	var $plugin;
 

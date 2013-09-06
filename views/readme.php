@@ -6,7 +6,7 @@
 	<p><a href="#" id="generate-previews">Generate Font Previews</a></p>
 
 	<h3 class="example-output">Example output</h3>
-	<p><?php do_action( 'styles_font_dropdown' ); ?></p>
+	<p><?php do_action( 'styles_font_menu' ); ?></p>
 
 	<?php echo Markdown( file_get_contents( dirname( dirname( __FILE__ ) ) . '/readme.md' ) ); ?>
 

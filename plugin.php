@@ -1,6 +1,6 @@
 <?php
 /*
-Plugin Name: Styles: Font Dropdown
+Plugin Name: Styles: Font Menu
 Plugin URI: http://github.com/stylesplugin/styles-font-dropdown
 Description: Display an up-to-date menu of Google Fonts. Include it in your own plugins and themes, or install as a plugin for testing and a live demo. Uses the Chosen library to allow menu search and styles.
 Version: 0.1
@@ -36,9 +36,9 @@ Author URI: http://brainstormmedia.com
  * 
  * @example include 'styles-font-dropdown/plugin.php';
  */
-if ( !function_exists( 'styles_font_dropdown_init' ) ) :
+if ( !function_exists( 'styles_font_menu_init' ) ) :
 
-function styles_font_dropdown_init() {
+function styles_font_menu_init() {
 
 	if ( is_admin() ) {
 
@@ -54,9 +54,9 @@ function styles_font_dropdown_init() {
 			 * Exit and warn by default. Use the filter to disable exiting,
 			 * or add your own behavior and return false.
 			 * 
-			 * @example add_filter( 'styles_font_dropdown_include_on_frontend', '__return_false' );
+			 * @example add_filter( 'styles_font_menu_include_on_frontend', '__return_false' );
 			 */
-			if ( apply_filters( 'styles_font_dropdown_exit_on_php_version_error', true ) ) {
+			if ( apply_filters( 'styles_font_menu_exit_on_php_version_error', true ) ) {
 				exit( $exit_message );
 			}else {
 				return false;
@@ -68,15 +68,15 @@ function styles_font_dropdown_init() {
 	/**
 	 * Only include library in admin by default. Override with the filter
 	 * 
-	 * @example add_filter( 'styles_font_dropdown_include_on_frontend', '__return_true' );
+	 * @example add_filter( 'styles_font_menu_include_on_frontend', '__return_true' );
 	 */
-	if ( apply_filters( 'styles_font_dropdown_include_on_frontend', is_admin() ) ) {
-		if ( !class_exists( 'Styles_Font_Dropdown' ) ) {
-			require_once dirname( __FILE__ ) . '/classes/styles-font-dropdown.php';
+	if ( apply_filters( 'styles_font_menu_include_on_frontend', is_admin() ) ) {
+		if ( !class_exists( 'Styles_Font_Menu' ) ) {
+			require_once dirname( __FILE__ ) . '/classes/styles-font-menu.php';
 		}
 	}
 
 }
-add_action( 'init', 'styles_font_dropdown_init' );
+add_action( 'init', 'styles_font_menu_init' );
 
 endif;

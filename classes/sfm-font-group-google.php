@@ -3,7 +3,7 @@
 class SFM_Font_Group_Google extends SFM_Font_Group {
 
 	const font_api_url = 'https://www.googleapis.com/webfonts/v1/webfonts';
-	const at_import_template = "@import url(//fonts.googleapis.com/css?family=@import_family@);/r";
+	const import_template = "@import url(//fonts.googleapis.com/css?family=@import_family@);/r";
 
 	/**
 	 * @example Override with <code>add_filter( 'styles_google_fonts_cache_interval', function(){ return 60*60*24*1; } );</code>
@@ -108,7 +108,7 @@ class SFM_Font_Group_Google extends SFM_Font_Group {
 			$this->option_values[ 'fonts' ][] = $font->get_option_values();
 		}
 
-		$this->option_values[ 'at_import_template' ] = self::at_import_template;
+		$this->option_values[ 'import_template' ] = self::import_template;
 
 		return $this->option_values;
 	}

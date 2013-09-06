@@ -126,6 +126,7 @@ class SFM_Plugin {
 		wp_register_script( 'styles-chosen', $this->plugin_directory . '/js/chosen/chosen.jquery.min.js', array( 'jquery' ), $this->version );
 		wp_register_script( 'styles-font-menu', $this->plugin_directory . '/js/styles-font-menu.js', array( 'jquery', 'styles-chosen' ), $this->version );
 		wp_register_style( 'styles-chosen', $this->plugin_directory . '/js/chosen/chosen.css', array(), $this->version );
+		wp_register_style( 'styles-font-menu', $this->plugin_directory . '/css/styles-font-menu.css', array(), $this->version );
 		// wp_register_style( 'styles-chosen', $this->plugin_directory . '/js/chosen/chosen.min.css', array(), $this->version );
 
 		// Pass Google Font Families to javascript
@@ -137,9 +138,9 @@ class SFM_Plugin {
 		// Tracks whether dependencies have already been output
 		wp_print_scripts( array( 'styles-font-menu' ) );
 		wp_print_styles( array( 'styles-chosen' ) );
+		wp_print_styles( array( 'styles-font-menu' ) );
 
 		// Generated scripts for font previews
-		FB::log($this->standard_fonts->get_menu_css(), '$this->standard_fonts->get_menu_css()');
 		echo '<style>' . $this->standard_fonts->get_menu_css() . '</style>';
 
 		$this->scripts_printed = true;

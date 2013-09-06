@@ -13,29 +13,6 @@
 
 </div>
 
-<style>
-	#styles-font-menu-readme > ul {
-		list-style-type: disc;
-		margin-left: 30px;
-	}
-	.sfm .chosen-results {
-		max-height: 400px !important;
-	}
-
-	.sfm .sf {
-		font-size: 48px;
-		height:64px;
-		line-height: 64px !important;
-		white-space: nowrap;
-	}
-
-	.sfm .gf {
-		 height:90px; text-indent: -9999px; overflow:hidden;
-		 background-repeat: no-repeat;
-	}
-
-</style>
-
 <script>
 
 	/**

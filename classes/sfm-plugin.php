@@ -1,15 +1,15 @@
 <?php
 
-if ( !class_exists( 'Styles_Font_Menu' ) ) :
+if ( !class_exists( 'SFM_Plugin' ) ) :
 
-require_once dirname(__FILE__) . '/styles-font-menu-admin.php';
-require_once dirname(__FILE__) . '/styles-fonts.php';
-require_once dirname(__FILE__) . '/styles-standard-fonts.php';
-require_once dirname(__FILE__) . '/styles-google-fonts.php';
-require_once dirname(__FILE__) . '/styles-font.php';
-require_once dirname(__FILE__) . '/styles-font-google.php';
+require_once dirname(__FILE__) . '/sfm-admin.php';
+require_once dirname(__FILE__) . '/sfm-font-group.php';
+require_once dirname(__FILE__) . '/sfm-font-group-standard.php';
+require_once dirname(__FILE__) . '/sfm-font-group-google.php';
+require_once dirname(__FILE__) . '/sfm-font-standard.php';
+require_once dirname(__FILE__) . '/sfm-font-google.php';
 
-add_action( 'init', 'Styles_Font_Menu::get_instance', 11 );
+add_action( 'init', 'SFM_Plugin::get_instance', 11 );
 
 /**
  * Controller class
@@ -17,9 +17,9 @@ add_action( 'init', 'Styles_Font_Menu::get_instance', 11 );
  * Loads views from views/ directory
  * 
  * Follows the Singleton pattern. @see http://jumping-duck.com/tutorial/wordpress-plugin-structure/
- * @example Access plugin instance with $font_dropdown = Styles_Font_Menu::get_instance();
+ * @example Access plugin instance with $font_dropdown = SFM_Plugin::get_instance();
  */
-class Styles_Font_Menu {
+class SFM_Plugin {
 
 	/**
 	 * @var string The plugin version.
@@ -34,32 +34,32 @@ class Styles_Font_Menu {
 	/**
 	 * @var string Class to apply to menu element and prefix to selectors.
 	 */
-	protected $menu_class = 'stfm';
+	protected $menu_class = 'sfm';
 
 	/**
-	 * @var Styles_Font_Menu_Admin Methods for WordPress admin user interface.
+	 * @var SFM_Admin Methods for WordPress admin user interface.
 	 */
 	var $admin;
 
 	/**
-	 * @var Styles_Standard_Fonts Web standard font families and CSS font stacks.
+	 * @var SFM_Font_Group_Standard Web standard font families and CSS font stacks.
 	 */
 	var $standard_fonts;
 
 	/**
-	 * @var Styles_Google_Fonts Connects to Google Font API.
+	 * @var SFM_Font_Group_Google Connects to Google Font API.
 	 */
 	var $google_fonts;
 
 	/**
-	 * @var Styles_Font_Preview Generate image preview of a font.
+	 * @var SFM_Image_Preview Generate image preview of a font.
 	 */
 	var $font_preview;
 
 	/**
 	 * Set with site_url() because we might not be running as a plugin.
 	 * 
-	 * @var string URL for the styles-font-dropdown directory.
+	 * @var string URL for the styles-font-menu directory.
 	 */
 	var $plugin_directory;
 
@@ -104,9 +104,9 @@ class Styles_Font_Menu {
 		$this->plugin_directory = site_url( str_replace( ABSPATH, '', dirname( dirname( __FILE__ ) ) ) );
 		$this->plugin_basename = plugin_basename( dirname( dirname( __FILE__ ) ) . '/plugin.php' );
 
-		$this->admin = new Styles_Font_Menu_Admin( $this );
-		$this->google_fonts = new Styles_Google_Fonts();
-		$this->standard_fonts = new Styles_Standard_Fonts();
+		$this->admin = new SFM_Admin( $this );
+		$this->google_fonts = new SFM_Font_Group_Google();
+		$this->standard_fonts = new SFM_Font_Group_Standard();
 
 		/**
 		 * Output dropdown menu anywhere styles_font_menu action is called.
@@ -145,10 +145,10 @@ class Styles_Font_Menu {
 		if ( !isset( $_GET['styles-font-preview'] ) ) {
 			return false;
 		}
-		if ( !class_exists( 'Styles_Font_Preview') ) {
-			require_once dirname( __FILE__ ) . '/styles-font-preview.php';
+		if ( !class_exists( 'SFM_Image_Preview') ) {
+			require_once dirname( __FILE__ ) . '/sfm-image-preview.php';
 		}
-		$this->font_preview = new Styles_Font_Preview( $this );
+		$this->font_preview = new SFM_Image_Preview( $this );
 	}
 
 	/**

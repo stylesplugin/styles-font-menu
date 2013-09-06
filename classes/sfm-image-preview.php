@@ -1,6 +1,6 @@
 <?php
 
-class Styles_Font_Preview {
+class SFM_Image_Preview {
 
 	/**
 	 * @var Styles_Font_Dropdown Pointer to parent/wrapper object.

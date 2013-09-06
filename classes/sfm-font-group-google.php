@@ -1,6 +1,6 @@
 <?php
 
-class Styles_Google_Fonts extends Styles_Fonts {
+class SFM_Font_Group_Google extends SFM_Font_Group {
 
 	const font_api_url = 'https://www.googleapis.com/webfonts/v1/webfonts';
 	const at_import_template = "@import url(//fonts.googleapis.com/css?family=@import_family@);/r";
@@ -17,7 +17,7 @@ class Styles_Google_Fonts extends Styles_Fonts {
 	protected $font_data;
 
 	/**
-	 * @var array Array of Styles_Font_Google instances instantiated from $font_data
+	 * @var array Array of SFM_Font_Google instances instantiated from $font_data
 	 */
 	protected $fonts;
 
@@ -84,7 +84,7 @@ class Styles_Google_Fonts extends Styles_Fonts {
 			// Exclude non-latin fonts
 			if ( !in_array('latin', $font->subsets ) ) { continue; }
 			
-			$this->fonts[] = new Styles_Font_Google( array( 
+			$this->fonts[] = new SFM_Font_Google( array( 
 				'family' => $font->family,
 				'name' => $font->family,
 				'variants' => $font->variants,

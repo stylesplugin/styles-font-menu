@@ -1,6 +1,6 @@
 <?php
 
-abstract class Styles_Fonts {
+abstract class SFM_Font_Group {
 
 	/**
 	 * If client tries to access variables directly, pass to get() method

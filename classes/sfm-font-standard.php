@@ -1,6 +1,6 @@
 <?php
 
-class Styles_Font {
+class SFM_Font_Standard {
 
 	/**
 	 * @var string Name of the font
@@ -102,7 +102,7 @@ class Styles_Font {
 	}
 
 	public function get_selector(){
-		$plugin = Styles_Font_Menu::get_instance();
+		$plugin = SFM_Plugin::get_instance();
 		$prefix = $plugin->get_menu_class();
 
 		return '.' . $prefix . ' .' . $this->get_classname();

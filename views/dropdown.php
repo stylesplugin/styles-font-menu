@@ -15,7 +15,7 @@
 	<?php echo $this->google_fonts->fonts ?>
 
 	<?php /* 
-		Google Fonts loaded by styles-font-dropdown.js
+		Google Fonts loaded by styles-font-menu.js
 
 		This is done for performance reasons. The list is 600+ fonts.
 		In cases where the dropdown is used multiple times on one page,

@@ -1,6 +1,6 @@
 <?php
 
-class Styles_Font_Google extends Styles_Font {
+class SFM_Font_Google extends SFM_Font_Standard {
 
 	/**
 	 * @var array Variant names

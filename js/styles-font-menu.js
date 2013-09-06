@@ -1,7 +1,7 @@
 jQuery( document ).ready( function( $ ){
 
 	// Add Google Fonts and Chosen to select elements
-	$('select.stfm').stylesFontDropdown();
+	$('select.sfm').stylesFontDropdown();
 
 });
 
@@ -91,7 +91,7 @@ jQuery( document ).ready( function( $ ){
 
 	/**
 	 * Attach this plugin instance to the target elements
-	 * Access later with $('select.styles-font-dropdown').data('stylesFontDropdown');
+	 * Access later with $('select.styles-font-menu').data('stylesFontDropdown');
 	 */
 	$.fn.stylesFontDropdown = function(options) {
 		return this.each(function() {

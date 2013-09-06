@@ -1,6 +1,6 @@
 <?php
 
-class Styles_Font_Menu_Admin {
+class SFM_Admin {
 
 	/**
 	 * @var Styles_Font_Menu Pointer to parent/wrapper object.
@@ -10,7 +10,7 @@ class Styles_Font_Menu_Admin {
 	/**
 	 * @var string Slug for readme at /wp-admin/plugins.php?page=$readme_page_slug
 	 */
-	var $readme_page_slug = 'styles-font-dropdown';
+	var $readme_page_slug = 'styles-font-menu';
 
 	public function __construct( $plugin ) {
 		$this->plugin = $plugin;
@@ -35,7 +35,7 @@ class Styles_Font_Menu_Admin {
 	/**
 	 * Display readme and working example in WordPress admin
 	 * Does not add a menu item
-	 * @link /wp-admin/plugins.php?page=styles-font-dropdown
+	 * @link /wp-admin/plugins.php?page=styles-font-menu
 	 */
 	public function add_readme_page() {
 		add_submenu_page( null, 'Font Dropdown Menu', 'Font Dropdown Menu', 'manage_options', $this->readme_page_slug, array( $this, 'get_view_readme' ) );

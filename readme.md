@@ -1,6 +1,6 @@
 ## Example output
 
-![Example output](https://raw.github.com/stylesplugin/styles-font-dropdown/master/img/example-output.gif)
+![Example output](https://raw.github.com/stylesplugin/styles-font-menu/master/img/example-output.gif)
 
 This menu can be displayed in your templates with this code: `do_action( 'styles_font_menu' );`
 
@@ -8,11 +8,11 @@ This menu can be displayed in your templates with this code: `do_action( 'styles
 
 To view a live demo of the menu in action, install and activate this WordPress plugin. Once activated, you can click the "How to use this plugin" link to view a working example.
 
-![Example output](https://raw.github.com/stylesplugin/styles-font-dropdown/master/img/live-demo.png)
+![Example output](https://raw.github.com/stylesplugin/styles-font-menu/master/img/live-demo.png)
 
 ## Including in plugins and themes
 
-Styles Font Dropdown has been packaged as a plugin only for testing purposes. In real world use, you should put it in your own theme or plugin, then include it with `include 'styles-font-dropdown/plugin.php';`
+Styles Font Dropdown has been packaged as a plugin only for testing purposes. In real world use, you should put it in your own theme or plugin, then include it with `include 'styles-font-menu/plugin.php';`
 
 ## Select Menu Values
 
@@ -34,7 +34,7 @@ For example, final output for Droid Sans would be `@import url(//fonts.googleapi
 
 If you [get a Google Fonts API key][1], you can enable auto-updates of the Google font list. By default, it caches and updates every 15 days.
 
-The API key can be set in your local environment, or for all your users. If you enable it only for development, the values will update `wp-content/plugins/styles-font-dropdown/js/google-fonts-api-fallback.json` for users who do not have API access.
+The API key can be set in your local environment, or for all your users. If you enable it only for development, the values will update `wp-content/plugins/styles-font-menu/js/google-fonts-api-fallback.json` for users who do not have API access.
 
 **Setting your API key**
 

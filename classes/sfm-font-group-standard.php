@@ -1,6 +1,6 @@
 <?php
 
-class Styles_Standard_Fonts extends Styles_Fonts {
+class SFM_Font_Group_Standard extends SFM_Font_Group {
 
 	/**
 	 * @var array Font name (key) => font-family stack (value)
@@ -24,7 +24,7 @@ class Styles_Standard_Fonts extends Styles_Fonts {
 		if ( !empty( $this->fonts ) ) { return $this->fonts; }
 
 		foreach ( (array) $this->font_data as $name => $family ){
-			$this->fonts[] = new Styles_Font( array(
+			$this->fonts[] = new SFM_Font_Standard( array(
 				'family' => $family,
 				'name' => $name,
 			) );

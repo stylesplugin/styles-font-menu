@@ -1,7 +1,7 @@
-<div class="wrap" id="styles-font-dropdown-readme">
+<div class="wrap" id="styles-font-menu-readme">
 
 	<?php screen_icon(); ?>
-	<h2><?php _e('Font Dropdown Menu', 'styles-font-dropdown'); ?></h2>
+	<h2><?php _e('Font Dropdown Menu', 'styles-font-menu'); ?></h2>
 
 	<p><a href="#" id="generate-previews">Generate Font Previews</a></p>
 
@@ -14,40 +14,40 @@
 </div>
 
 <style>
-	#styles-font-dropdown-readme > ul {
+	#styles-font-menu-readme > ul {
 		list-style-type: disc;
 		margin-left: 30px;
 	}
-	.stfm .chosen-results {
+	.sfm .chosen-results {
 		max-height: 400px !important;
 	}
 
-	.stfm .sf {
+	.sfm .sf {
 		font-size: 48px;
 		height:64px;
 		line-height: 64px !important;
 		white-space: nowrap;
 	}
 
-	.stfm .gf {
+	.sfm .gf {
 		 height:90px; text-indent: -9999px; overflow:hidden;
 		 background-repeat: no-repeat;
 	}
 
-	.stfm .arial { font-family: Arial, Helvetica, sans-serif; }
-	.stfm .bookman { font-family: Bookman, Palatino, Georgia, serif; }
-	.stfm .centurygothic { font-family: "Century Gothic", Helvetica, Arial, sans-serif; }
-	.stfm .comicsansms { font-family: "Comic Sans MS", Arial, sans-serif; }
-	.stfm .courier { font-family: Courier, monospace; }
-	.stfm .garamond { font-family: Garamond, Palatino, Georgia, serif; }
-	.stfm .georgia { font-family: Georgia, Times, serif; }
-	.stfm .helvetica { font-family: Helvetica, Arial, sans-serif; }
-	.stfm .lucidagrande { font-family: "Lucida Sans Unicode",Tahoma,Verdana,sans-serif; }
-	.stfm .palatino { font-family: Palatino, Georgia, serif; }
-	.stfm .tahoma { font-family: Tahoma, Verdana, Helvetica, sans-serif; }
-	.stfm .times { font-family: Times, Georgia, serif; }
-	.stfm .trebuchetms { font-family: "Trebuchet MS", Tahoma, Helvetica, sans-serif; }
-	.stfm .verdana { font-family: Verdana, Tahoma, sans-serif; }
+	.sfm .arial { font-family: Arial, Helvetica, sans-serif; }
+	.sfm .bookman { font-family: Bookman, Palatino, Georgia, serif; }
+	.sfm .centurygothic { font-family: "Century Gothic", Helvetica, Arial, sans-serif; }
+	.sfm .comicsansms { font-family: "Comic Sans MS", Arial, sans-serif; }
+	.sfm .courier { font-family: Courier, monospace; }
+	.sfm .garamond { font-family: Garamond, Palatino, Georgia, serif; }
+	.sfm .georgia { font-family: Georgia, Times, serif; }
+	.sfm .helvetica { font-family: Helvetica, Arial, sans-serif; }
+	.sfm .lucidagrande { font-family: "Lucida Sans Unicode",Tahoma,Verdana,sans-serif; }
+	.sfm .palatino { font-family: Palatino, Georgia, serif; }
+	.sfm .tahoma { font-family: Tahoma, Verdana, Helvetica, sans-serif; }
+	.sfm .times { font-family: Times, Georgia, serif; }
+	.sfm .trebuchetms { font-family: "Trebuchet MS", Tahoma, Helvetica, sans-serif; }
+	.sfm .verdana { font-family: Verdana, Tahoma, sans-serif; }
 </style>
 
 <script>
@@ -57,9 +57,9 @@
 	 */
 	(function($){
 
-		var $headings = $( 'h2,h3', '#styles-font-dropdown-readme' );
+		var $headings = $( 'h2,h3', '#styles-font-menu-readme' );
 		
-		$('select.stfm').change( function(){
+		$('select.sfm').change( function(){
 			$(this).data('stylesFontDropdown').preview_font_change( $headings );
 		});
 

@@ -112,7 +112,7 @@ class SFM_Plugin {
 		 * Output dropdown menu anywhere styles_font_menu action is called.
 		 * @example <code>do_action( 'styles_font_menu' );</code>
 		 */
-		add_action( 'styles_font_menu', array( $this, 'get_view_dropdown' ) );
+		add_action( 'styles_font_menu', array( $this, 'get_view_menu' ) );
 
 		/**
 		 * Generate an image preview of a font
@@ -157,17 +157,17 @@ class SFM_Plugin {
 	}
 
 	/**
-	 * Display views/dropdown.php
+	 * Display views/menu.php
 	 */
-	public function get_view_dropdown() {
-		$this->get_view( 'dropdown' );
+	public function get_view_menu() {
+		$this->get_view( 'menu' );
 	}
 
 	/**
 	 * Display any view from the views/ directory.
 	 * Allows views to have access to $this
 	 */
-	public function get_view( $file = 'dropdown' ) {
+	public function get_view( $file = 'menu' ) {
 		$file = dirname( dirname( __FILE__ ) ) . "/views/$file.php";
 		if ( file_exists( $file ) ) {
 			include $file;

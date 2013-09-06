@@ -1,9 +1,6 @@
 <?php
 
 abstract class Styles_Fonts {
-	protected $fonts;
-	protected $families;
-	protected $options;
 
 	/**
 	 * If client tries to access variables directly, pass to get() method
@@ -25,6 +22,18 @@ abstract class Styles_Fonts {
 		}else {
 			return false;
 		}
+	}
+
+	public function get_menu_css() {
+		if ( !empty( $this->menu_css ) ) {
+			return $this->menu_css;
+		}
+
+		foreach( $this->get_fonts() as $font ) {
+			$this->menu_css .= $font->get_menu_css();
+		}
+
+		return $this->menu_css;
 	}
 
 }

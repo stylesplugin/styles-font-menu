@@ -6,6 +6,8 @@ require_once dirname(__FILE__) . '/styles-font-menu-admin.php';
 require_once dirname(__FILE__) . '/styles-fonts.php';
 require_once dirname(__FILE__) . '/styles-standard-fonts.php';
 require_once dirname(__FILE__) . '/styles-google-fonts.php';
+require_once dirname(__FILE__) . '/styles-font.php';
+require_once dirname(__FILE__) . '/styles-font-google.php';
 
 add_action( 'init', 'Styles_Font_Menu::get_instance', 11 );
 
@@ -28,6 +30,11 @@ class Styles_Font_Menu {
 	 * @var Styles_Font_Menu Instance of the class.
 	 */
 	protected static $instance = false;
+
+	/**
+	 * @var string Class to apply to menu element and prefix to selectors.
+	 */
+	protected $menu_class = 'stfm';
 
 	/**
 	 * @var Styles_Font_Menu_Admin Methods for WordPress admin user interface.
@@ -117,18 +124,18 @@ class Styles_Font_Menu {
 		if ( $this->scripts_printed ) { return false; }
 
 		wp_register_script( 'styles-chosen', $this->plugin_directory . '/js/chosen/chosen.jquery.min.js', array( 'jquery' ), $this->version );
-		wp_register_script( 'styles-fonts-dropdown', $this->plugin_directory . '/js/styles-font-dropdown.js', array( 'jquery', 'styles-chosen' ), $this->version );
+		wp_register_script( 'styles-font-menu', $this->plugin_directory . '/js/styles-font-menu.js', array( 'jquery', 'styles-chosen' ), $this->version );
 		wp_register_style( 'styles-chosen', $this->plugin_directory . '/js/chosen/chosen.css', array(), $this->version );
 		// wp_register_style( 'styles-chosen', $this->plugin_directory . '/js/chosen/chosen.min.css', array(), $this->version );
 
 		// Pass Google Font Families to javascript
 		// This saves on bandwidth by outputing them once,
 		// then appending them to all <select> elements client-side
-		wp_localize_script( 'styles-fonts-dropdown', 'styles_google_options', $this->google_fonts->options );
+		wp_localize_script( 'styles-font-menu', 'styles_google_options', $this->google_fonts->option_values );
 
 		// Output scripts and dependencies
 		// Tracks whether dependencies have already been output
-		wp_print_scripts( array( 'styles-fonts-dropdown' ) );
+		wp_print_scripts( array( 'styles-font-menu' ) );
 		wp_print_styles( array( 'styles-chosen' ) );
 
 		$this->scripts_printed = true;

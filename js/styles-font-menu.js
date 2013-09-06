@@ -1,22 +1,20 @@
 jQuery( document ).ready( function( $ ){
 
 	// Add Google Fonts and Chosen to select elements
-	$('select.styles-font-dropdown').stylesFontDropdown();
+	$('select.stfm').stylesFontDropdown();
 
 });
 
-(function( $, styles_google_options ) {
-
+(function( $, google_fonts ) {
 	/**
 	 * Build Google Fonts option list only once
 	 */
 	var google_styles = '<style>';
 	var google_options = "<optgroup class='google-fonts' label='Google Fonts'>";
-	for (var i=0; i < styles_google_options.fonts.length; i++){
-		var classname = styles_google_options.fonts[i].font_family.replace( /[^a-zA-z0-9]/g, '' ).toLowerCase();
-		google_options += "<option class='" + classname + "' value='" + JSON.stringify( styles_google_options.fonts[i] ) + "'>" + styles_google_options.fonts[i].font_family + "</option>";
+	for (var i=0; i < google_fonts.fonts.length; i++){
+		google_options += "<option class='gf " + google_fonts.fonts[i].classname + "' value='" + JSON.stringify( google_fonts.fonts[i] ) + "'>" + google_fonts.fonts[i].name + "</option>";
 
-		google_styles += "." + classname + " { background: url(/wp-content/uploads/styles-fonts/png/" + classname + ".png) no-repeat; height:90px; text-indent: -9999px; overflow:hidden; }\r";
+		google_styles += "." + google_fonts.fonts[i].classname + " { background-image: url(/wp-content/uploads/styles-fonts/png/" + google_fonts.fonts[i].classname + ".png); }\r";
 	}
 	google_options += "</optgroup>";
 	google_styles += "</style>";
@@ -76,13 +74,13 @@ jQuery( document ).ready( function( $ ){
 			plugin.maybe_add_at_import_to_head( font );
 
 			// Update font-family
-			$target_elements.css('font-family', font.font_family );
+			$target_elements.css('font-family', font.family );
 		};
 
 		plugin.maybe_add_at_import_to_head = function( font ) {
 			// Add @import to <head> if needed 
 			if ( undefined !== font.import_family ) {
-				var atImport = styles_google_options.import_template.replace( '@import_family@', font.import_family );
+				var atImport = google_fonts.import_template.replace( '@import_family@', font.import_family );
 				$( '<style>' ).append( atImport ).appendTo( 'head' );
 			}
 		};

@@ -3,15 +3,16 @@
 	$this->print_scripts();
 ?>
 
-<select class="styles-font-dropdown" data-placeholder="Select a Font...">
+<select class="<?php echo $this->menu_class ?>" data-placeholder="Select a Font...">
 	<option value=""></option>
 
 	<optgroup label="Standard Fonts">
-		<?php foreach ( $this->standard_fonts->options['fonts'] as $font ): ?>
-			<?php $class = strtolower( preg_replace( '/[^a-zA-Z0-9]/', '', $font['font_name'] ) ); ?>
-			<option class="<?php echo $class ?>" value="<?php echo esc_attr( json_encode($font) ) ?>"><?php echo $font['font_name'] ?></option>
+		<?php foreach ( $this->standard_fonts->fonts as $font ): ?>
+			<option class="sf <?php echo $font->classname ?>" value="<?php esc_attr_e( $font ) ?>"><?php echo $font->name ?></option>
 		<?php endforeach; ?>
 	</optgroup>
+
+	<?php echo $this->google_fonts->fonts ?>
 
 	<?php /* 
 		Google Fonts loaded by styles-font-dropdown.js

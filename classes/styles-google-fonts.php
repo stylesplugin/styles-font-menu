@@ -3,6 +3,7 @@
 class Styles_Google_Fonts extends Styles_Fonts {
 
 	const font_api_url = 'https://www.googleapis.com/webfonts/v1/webfonts';
+	const at_import_template = "@import url(//fonts.googleapis.com/css?family=@import_family@);/r";
 
 	/**
 	 * @example Override with <code>add_filter( 'styles_google_fonts_cache_interval', function(){ return 60*60*24*1; } );</code>
@@ -13,20 +14,22 @@ class Styles_Google_Fonts extends Styles_Fonts {
 	/**
 	 * @var stdClass Response from Google API listing all fonts
 	 */
+	protected $font_data;
+
+	/**
+	 * @var array Array of Styles_Font_Google instances instantiated from $font_data
+	 */
 	protected $fonts;
 
 	/**
-	 * @var array All font families mentioned in $fonts
+	 * @var string CSS for display of font previews in the menu.
 	 */
-	protected $families;
+	protected $menu_css;
 
 	/**
-	 * @var array Mult-dimensional array containing necessary font metadata
+	 * Values to pass to javascript
 	 */
-	protected $options = array(
-		'import_template' => "@import url(//fonts.googleapis.com/css?family=@import_family@);\r",
-		'fonts' => array(),
-	);
+	protected $option_values;
 
 	/**
 	 * @var string path to JSON backup of Google API response. In case API fails or is unavailable.
@@ -39,73 +42,75 @@ class Styles_Google_Fonts extends Styles_Fonts {
 	}
 
 	/**
-	 * Fires when accessing $this->fonts from outside the class.
+	 * Fires when accessing $this->font_data from outside the class.
 	 */
-	public function get_fonts() {
+	public function get_font_data() {
 		// If we already processed fonts, return them.
-		if ( !empty( $this->fonts ) ) {
-			return $this->fonts;
+		if ( !empty( $this->font_data ) ) {
+			return $this->font_data;
 		}
 
 		// If fonts are cached in the transient, return them.
-		$this->fonts = get_transient( 'styles_google_fonts' );
-		if ( false !== $this->fonts ) {
-			return $this->fonts;
+		$this->font_data = get_transient( 'styles_google_fonts' );
+		if ( false !== $this->font_data ) {
+			return $this->font_data;
 		}
 
 		// If no cache, try connecting to Google API
-		$this->fonts = $this->remote_get_google_api();
+		$this->font_data = $this->remote_get_google_api();
 
 		// If Google API failed, use the fallback file.
-		if ( !is_object( $this->fonts ) || !is_array( $this->fonts->items ) ) {
-			$this->fonts = $this->get_api_fallback();
-			return $this->fonts;
+		if ( !is_object( $this->font_data ) || !is_array( $this->font_data->items ) ) {
+			$this->font_data = $this->get_api_fallback();
+			return $this->font_data;
 		}
 
 		// API returned some good data. Cache it to the transient
 		// and update the fallback file.
-		set_transient( 'styles_google_fonts', $this->fonts, $this->cache_interval );
+		set_transient( 'styles_google_font_data', $this->font_data, $this->cache_interval );
 		$this->set_api_fallback();
+
+		return $this->font_data;
+	}
+
+	/**
+	 * Fires when accessing $this->fonts from outside the class.
+	 */
+	public function get_fonts() {
+		if ( !empty( $this->fonts ) ) { return $this->fonts; }
+
+		foreach ( (array) $this->get_font_data()->items as $font ){
+
+			// Exclude non-latin fonts
+			if ( !in_array('latin', $font->subsets ) ) { continue; }
+			
+			$this->fonts[] = new Styles_Font_Google( array( 
+				'family' => $font->family,
+				'name' => $font->family,
+				'variants' => $font->variants,
+			) );
+
+		}
 
 		return $this->fonts;
 	}
 
 	/**
-	 * Fires when accessing $this->options from outside the class.
+	 * Strip out unecessary metadata for passing to javascript
+	 * 
+	 * @param array $font Font metadata, such as array( 'key', 'import_family', 'font_family', 'font_name' )
+	 * @return array Same array, stripped of extra keys
 	 */
-	public function get_options() {
-		if ( !empty( $this->options['fonts'] ) ) { return $this->options; }
+	public function get_option_values() {
+		if ( !empty( $this->option_values ) ) { return $this->option_values; }
 
-		foreach ( (array) $this->get_fonts()->items as $font ){
-
-			// Exclude non-latin fonts
-			if ( !in_array('latin', $font->subsets ) ) {
-				continue;
-			}
-
-			$import_family = str_replace( ' ', '+', $font->family ) . ':' . implode( ',', $font->variants );
-			
-			$this->options['fonts'][] = array(
-				'import_family' => $import_family,
-				'font_family' => $font->family,
-			);
+		foreach ( $this->get_fonts() as $font ) {
+			$this->option_values[ 'fonts' ][] = $font->get_option_values();
 		}
 
-		return $this->options;
-	}
+		$this->option_values[ 'at_import_template' ] = self::at_import_template;
 
-	/**
-	 * Fires when accessing $this->families from outside the class.
-	 */
-	public function get_families() {
-		if ( !empty( $this->families ) ) { return $this->families; }
-
-		foreach ( (array) $this->get_fonts()->items as $font ){
-			$variants = str_replace( ' ', '+', $font->family ) . ':' . implode( ',', $font->variants );
-			$this->families[ $font->family ] = $variants;
-		}
-
-		return $this->families;
+		return $this->option_values;
 	}
 
 	/**

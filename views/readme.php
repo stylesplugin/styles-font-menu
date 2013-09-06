@@ -18,31 +18,36 @@
 		list-style-type: disc;
 		margin-left: 30px;
 	}
-	.styles-font-dropdown .chosen-results {
+	.stfm .chosen-results {
 		max-height: 400px !important;
 	}
 
-.styles-font-dropdown .arial, .styles-font-dropdown .bookman, .styles-font-dropdown .centurygothic, .styles-font-dropdown .comicsansms, .styles-font-dropdown .courier, .styles-font-dropdown .garamond, .styles-font-dropdown .georgia, .styles-font-dropdown .helvetica, .styles-font-dropdown .lucidagrande, .styles-font-dropdown .palatino, .styles-font-dropdown .tahoma, .styles-font-dropdown .times, .styles-font-dropdown .trebuchetms, .styles-font-dropdown .verdana {
-	font-size: 48px;
-	height:64px;
-	line-height: 64px !important;
-	white-space: nowrap;
-}
+	.stfm .sf {
+		font-size: 48px;
+		height:64px;
+		line-height: 64px !important;
+		white-space: nowrap;
+	}
 
-.styles-font-dropdown .arial { font-family: Arial, Helvetica, sans-serif; }
-.styles-font-dropdown .bookman { font-family: Bookman, Palatino, Georgia, serif; }
-.styles-font-dropdown .centurygothic { font-family: "Century Gothic", Helvetica, Arial, sans-serif; }
-.styles-font-dropdown .comicsansms { font-family: "Comic Sans MS", Arial, sans-serif; }
-.styles-font-dropdown .courier { font-family: Courier, monospace; }
-.styles-font-dropdown .garamond { font-family: Garamond, Palatino, Georgia, serif; }
-.styles-font-dropdown .georgia { font-family: Georgia, Times, serif; }
-.styles-font-dropdown .helvetica { font-family: Helvetica, Arial, sans-serif; }
-.styles-font-dropdown .lucidagrande { font-family: "Lucida Sans Unicode",Tahoma,Verdana,sans-serif; }
-.styles-font-dropdown .palatino { font-family: Palatino, Georgia, serif; }
-.styles-font-dropdown .tahoma { font-family: Tahoma, Verdana, Helvetica, sans-serif; }
-.styles-font-dropdown .times { font-family: Times, Georgia, serif; }
-.styles-font-dropdown .trebuchetms { font-family: "Trebuchet MS", Tahoma, Helvetica, sans-serif; }
-.styles-font-dropdown .verdana { font-family: Verdana, Tahoma, sans-serif; }
+	.stfm .gf {
+		 height:90px; text-indent: -9999px; overflow:hidden;
+		 background-repeat: no-repeat;
+	}
+
+	.stfm .arial { font-family: Arial, Helvetica, sans-serif; }
+	.stfm .bookman { font-family: Bookman, Palatino, Georgia, serif; }
+	.stfm .centurygothic { font-family: "Century Gothic", Helvetica, Arial, sans-serif; }
+	.stfm .comicsansms { font-family: "Comic Sans MS", Arial, sans-serif; }
+	.stfm .courier { font-family: Courier, monospace; }
+	.stfm .garamond { font-family: Garamond, Palatino, Georgia, serif; }
+	.stfm .georgia { font-family: Georgia, Times, serif; }
+	.stfm .helvetica { font-family: Helvetica, Arial, sans-serif; }
+	.stfm .lucidagrande { font-family: "Lucida Sans Unicode",Tahoma,Verdana,sans-serif; }
+	.stfm .palatino { font-family: Palatino, Georgia, serif; }
+	.stfm .tahoma { font-family: Tahoma, Verdana, Helvetica, sans-serif; }
+	.stfm .times { font-family: Times, Georgia, serif; }
+	.stfm .trebuchetms { font-family: "Trebuchet MS", Tahoma, Helvetica, sans-serif; }
+	.stfm .verdana { font-family: Verdana, Tahoma, sans-serif; }
 </style>
 
 <script>
@@ -54,7 +59,7 @@
 
 		var $headings = $( 'h2,h3', '#styles-font-dropdown-readme' );
 		
-		$('select.styles-font-dropdown').change( function(){
+		$('select.stfm').change( function(){
 			$(this).data('stylesFontDropdown').preview_font_change( $headings );
 		});
 

@@ -80,7 +80,6 @@ class SFM_Group_Google extends SFM_Group {
 		if ( !empty( $this->fonts ) ) { return $this->fonts; }
 
 		foreach ( (array) $this->get_font_data()->items as $font ){
-
 			// Exclude non-latin fonts
 			if ( !in_array('latin', $font->subsets ) ) { continue; }
 			
@@ -88,11 +87,26 @@ class SFM_Group_Google extends SFM_Group {
 				'family' => $font->family,
 				'name' => $font->family,
 				'variants' => $font->variants,
+				'files' => $font->files,
 			) );
 
 		}
 
 		return $this->fonts;
+	}
+
+	/**
+	 * Get individual font by name
+	 * 
+	 * @return SFM_Single_Google
+	 */
+	public function get_font_by_name( $name ) {
+		foreach ( $this->get_fonts() as $font ) {
+			if ( $name == $font->family ) {
+				return $font;
+			}
+		}
+		return false;
 	}
 
 	/**

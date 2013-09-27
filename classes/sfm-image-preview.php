@@ -3,9 +3,9 @@
 class SFM_Image_Preview {
 
 	/**
-	 * @var SF_Plugin Pointer to parent/wrapper object.
+	 * @var string $_GET key that triggers this class to run
 	 */
-	var $plugin;
+	protected $action_key = 'styles-font-preview';
 
 	/**
 	 * @var string Absolute path to cached fonts.
@@ -30,9 +30,7 @@ class SFM_Image_Preview {
 		'font_color' => array( 0, 0, 0 ),
 	);
 
-	public function __construct( $plugin ) {
-		$this->plugin = $plugin;
-
+	public function __construct() {
 		$uploads = wp_upload_dir();
 		$this->fonts_directory = $uploads['basedir'] . '/styles-fonts';
 		$this->fonts_directory_url = $uploads['baseurl'] . '/styles-fonts';
@@ -44,36 +42,42 @@ class SFM_Image_Preview {
 		exit;
 	}
 
-	public function get_font() {
-		if ( empty( $_GET['styles-font-preview'] ) ) {
-			wp_die( 'Please specify a font name.');
+	public function get_font_variant() {
+		if ( isset( $this->font_variant ) ) {
+			return $this->font_variant;
 		}
-		$this->font_family = $_GET['styles-font-preview'];
+		$variant_request = ( isset( $_GET['variant'] ) ) ? $_GET['variant'] : false;
 
-		// Find font in Google Fonts JSON object
-		foreach ( $this->plugin->google_fonts->fonts->items as $font ) {
-			if ( $this->font_family == $font->family ) {
-				$this->font = $font;
-				break;
-			}
-		}
-
-		// Set target variant
-		if ( isset( $_GET['variant'] ) ) {
-			if ( in_array( $_GET['variant'], (array) $this->font->files ) ) {
-				$this->font_variant = $_GET['variant'];
+		if ( $variant_request ) {
+			// Validate requested variant
+			if ( $this->font->get_variant( $variant_request ) ) {
+				$this->font_variant = $this->font->get_variant( $variant_request );
 			}else {
-				$variants = implode( '</li><li>', array_keys( (array) $this->font->files ) );
+				$variants = implode( '</li><li>', array_keys( (array) $this->font->variants ) );
 				wp_die( 'Variant not found. Variants: <ul><li>' . $variants . '</li></ul>' );
 			}
 		}else {
-			if ( in_array( 'regular', (array) $this->font->files ) ) {
-				$this->font_variant = 'regular';
-			}else {
-				$variants = array_keys( (array) $this->font->files );
-				$this->font_variant = $variants[0];
-			}
+			// Get default variant
+			$this->font_variant = $this->font->default_variant;
 		}
+
+		return $this->font_variant;
+	}
+
+	public function get_font() {
+		if ( empty( $_GET[ $this->action_key ] ) ) {
+			wp_die( 'Please specify a font name.');
+		}
+		$this->font_family = $_GET[ $this->action_key ];
+
+		$plugin = SFM_Plugin::get_instance();
+
+		$this->font = $plugin->google_fonts->get_font_by_name( $this->font_family );
+		if ( !$this->font ) {
+			wp_die( 'Font not found: ' . $this->font_family );
+		}
+
+		$this->get_font_variant();
 
 		$this->font_url = $this->font->files->{$this->font_variant};
 
@@ -159,6 +163,10 @@ class SFM_Image_Preview {
 	}
 
 	public function get_remote_font() {
+		if ( empty( $this->font_url ) ) {
+			wp_die( 'Font URL not set.' );
+		}
+		
 		$response = wp_remote_get( $this->font_url );
 
 		if ( is_a( $response, 'WP_Error') ) {

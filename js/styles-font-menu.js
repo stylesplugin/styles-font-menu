@@ -11,9 +11,11 @@ jQuery( document ).ready( function( $ ){
 	 */
 	var google_styles = '<style>';
 	var google_options = "<optgroup class='google-fonts' label='Google Fonts'>";
+	var is_readme = ( $('#styles-font-menu-readme').length > 0 );
+
 	for (var i=0; i < google_fonts.fonts.length; i++){
 		// Don't show if no preview
-		if ( undefined === google_fonts.fonts[i].png_url ) {
+		if ( !is_readme && undefined === google_fonts.fonts[i].png_url ) {
 			continue;
 		}
 

@@ -13,11 +13,6 @@ class SFM_Single_Google extends SFM_Single_Standard {
 	protected $variant;
 
 	/**
-	 * @var string Key for variant to use if none set
-	 */
-	protected $default_variant;
-
-	/**
 	 * @var array URLs to TTF files with variants as array keys.
 	 */
 	protected $files;

@@ -12,6 +12,11 @@ jQuery( document ).ready( function( $ ){
 	var google_styles = '<style>';
 	var google_options = "<optgroup class='google-fonts' label='Google Fonts'>";
 	for (var i=0; i < google_fonts.fonts.length; i++){
+		// Don't show if no preview
+		if ( undefined === google_fonts.fonts[i].png_url ) {
+			continue;
+		}
+
 		google_options += "<option class='gf " + google_fonts.fonts[i].classname + "' value='" + JSON.stringify( google_fonts.fonts[i] ) + "'>" + google_fonts.fonts[i].name + "</option>";
 
 		google_styles += ".sfm ." + google_fonts.fonts[i].classname + " { background-image: url(" + google_fonts.fonts[i].png_url + "); }\r";

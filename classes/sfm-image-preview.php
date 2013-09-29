@@ -69,6 +69,7 @@ class SFM_Image_Preview {
 			wp_die( 'Could not load $ttf_path: ' . $ttf_path );
 		}
 
+		// Text
 		imagettftext($mask, $font_size, 0, $left_margin, $font_baseline, $foreground, $ttf_path, $this->font->family );
 
 		// White fill
@@ -80,13 +81,14 @@ class SFM_Image_Preview {
 		imagesavealpha( $image, true );
 		imagefill( $image, 0, 0, imagecolorallocatealpha( $image, 0, 0, 0, 127 ) );
 
+		// Apply Mask to Image
 		for( $x = 0; $x < $width; $x++ ) {
-        for( $y = 0; $y < $height; $y++ ) {
-            $alpha = imagecolorsforindex( $mask, imagecolorat( $mask, $x, $y ) );
-            $alpha = 127 - floor( $alpha[ 'red' ] / 2 );
-            $color = imagecolorsforindex( $white, imagecolorat( $white, $x, $y ) );
-            imagesetpixel( $image, $x, $y, imagecolorallocatealpha( $image, $color[ 'red' ], $color[ 'green' ], $color[ 'blue' ], $alpha ) );
-        }
+      for( $y = 0; $y < $height; $y++ ) {
+        $alpha = imagecolorsforindex( $mask, imagecolorat( $mask, $x, $y ) );
+        $alpha = 127 - floor( $alpha[ 'red' ] / 2 );
+        $color = imagecolorsforindex( $white, imagecolorat( $white, $x, $y ) );
+        imagesetpixel( $image, $x, $y, imagecolorallocatealpha( $image, $color[ 'red' ], $color[ 'green' ], $color[ 'blue' ], $alpha ) );
+      }
     }
 
 		ob_start();

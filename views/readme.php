@@ -51,7 +51,7 @@
 				"font-family": name
 			}, function( data, textStatus, jqXHR ){
 
-				var img = $('<img>').attr( 'src', data );
+				var img = $('<img>').attr( 'src', data ).addClass('sfm-preview');
 
 				$('#generate-previews').after( img ).after( '<br/>' );
 

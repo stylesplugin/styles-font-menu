@@ -58,17 +58,36 @@ class SFM_Image_Preview {
 		$width = $height = $font_size = $left_margin = $font_baseline = $background_color = $font_color = false;
 		extract( $this->preview_attributes, EXTR_IF_EXISTS );
 		
-		$image = imageCreate($width, $height);
+		// Text Mask
+		$mask = imageCreate($width, $height);
 
-		$background = imageColorAllocate($image, $background_color[0], $background_color[1], $background_color[2]);
-		$foreground = imageColorAllocate($image, $font_color[0], $font_color[1], $font_color[2]);
+		$background = imageColorAllocate($mask, $background_color[0], $background_color[1], $background_color[2]);
+		$foreground = imageColorAllocate($mask, $font_color[0], $font_color[1], $font_color[2]);
 
 		$ttf_path = $this->font->maybe_get_remote_ttf();
 		if ( !file_exists( $ttf_path ) ) {
 			wp_die( 'Could not load $ttf_path: ' . $ttf_path );
 		}
 
-		imagettftext($image, $font_size, 0, $left_margin, $font_baseline, $foreground, $ttf_path, $this->font->family );
+		imagettftext($mask, $font_size, 0, $left_margin, $font_baseline, $foreground, $ttf_path, $this->font->family );
+
+		// White fill
+		$white = imageCreate($width, $height);
+		$background = imageColorAllocate($white, $background_color[0], $background_color[1], $background_color[2]);
+
+		// Image
+		$image = imagecreatetruecolor($width, $height);
+		imagesavealpha( $image, true );
+		imagefill( $image, 0, 0, imagecolorallocatealpha( $image, 0, 0, 0, 127 ) );
+
+		for( $x = 0; $x < $width; $x++ ) {
+        for( $y = 0; $y < $height; $y++ ) {
+            $alpha = imagecolorsforindex( $mask, imagecolorat( $mask, $x, $y ) );
+            $alpha = 127 - floor( $alpha[ 'red' ] / 2 );
+            $color = imagecolorsforindex( $white, imagecolorat( $white, $x, $y ) );
+            imagesetpixel( $image, $x, $y, imagecolorallocatealpha( $image, $color[ 'red' ], $color[ 'green' ], $color[ 'blue' ], $alpha ) );
+        }
+    }
 
 		ob_start();
 		imagePNG($image);

@@ -16,6 +16,9 @@
 	line-height: 64px !important;
 	white-space: nowrap;
 }
+.sfm .sf:hover {
+	color: #21759B;
+}
 
 /* Google Font */
 .sfm .gf {
@@ -23,4 +26,21 @@
 	 text-indent: -9999px;
 	 overflow:hidden;
 	 background-repeat: no-repeat;
+}
+
+img.sfm-preview {
+	margin: 0;
+	padding:0;
+	border: 0;
+}
+
+.sfm-preview, .sfm .gf {
+	background-color: #000;
+}
+
+.sfm-preview:hover, .sfm .gf:hover {
+	background-color: #21759B;
+}
+.sfm .chosen-results li {
+	padding:0 !important;
 }

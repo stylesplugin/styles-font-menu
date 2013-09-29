@@ -108,7 +108,7 @@ class SFM_Single_Google extends SFM_Single_Standard {
 		$this->file_paths = array(
 			'plugin' => array(
 				'path' => $plugin->plugin_directory . $fonts_dir,
-				'url'  => $plugin->url . $fonts_dir,
+				'url'  => $plugin->plugin_url . $fonts_dir,
 			),
 			'uploads' => array(
 				'path' => $uploads['basedir'] . $fonts_dir,
@@ -130,6 +130,7 @@ class SFM_Single_Google extends SFM_Single_Standard {
 		foreach ( $locations as $location ) {
 			$path = $location[ 'path' ] . $target;
 			$url  = $location[ 'url' ]  . $target;
+			FB::log($path, '$path');
 			if ( file_exists( $path ) ) {
 				if ( 'path' == $path_or_url ) {
 					return $path;

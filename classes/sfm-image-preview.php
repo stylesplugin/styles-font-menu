@@ -35,33 +35,12 @@ class SFM_Image_Preview {
 		$this->fonts_directory = $uploads['basedir'] . '/styles-fonts';
 		$this->fonts_directory_url = $uploads['baseurl'] . '/styles-fonts';
 
-		$this->get_font();
-
-		$this->get_image();
+		if ( isset( $_GET[ $this->action_key ] ) ) {
+			$this->get_font();
+			$this->get_image();
+		}
 
 		exit;
-	}
-
-	public function get_font_variant() {
-		if ( isset( $this->font_variant ) ) {
-			return $this->font_variant;
-		}
-		$variant_request = ( isset( $_GET['variant'] ) ) ? $_GET['variant'] : false;
-
-		if ( $variant_request ) {
-			// Validate requested variant
-			if ( $this->font->get_variant( $variant_request ) ) {
-				$this->font_variant = $this->font->get_variant( $variant_request );
-			}else {
-				$variants = implode( '</li><li>', array_keys( (array) $this->font->variants ) );
-				wp_die( 'Variant not found. Variants: <ul><li>' . $variants . '</li></ul>' );
-			}
-		}else {
-			// Get default variant
-			$this->font_variant = $this->font->default_variant;
-		}
-
-		return $this->font_variant;
 	}
 
 	public function get_font() {
@@ -91,6 +70,28 @@ class SFM_Image_Preview {
 		$this->font_png_url = $this->fonts_directory_url . "/png/$nicename.png";
 
 		$this->maybe_get_remote_font();
+	}
+
+	public function get_font_variant() {
+		if ( isset( $this->font_variant ) ) {
+			return $this->font_variant;
+		}
+		$variant_request = ( isset( $_GET['variant'] ) ) ? $_GET['variant'] : false;
+
+		if ( $variant_request ) {
+			// Validate requested variant
+			if ( $this->font->get_variant( $variant_request ) ) {
+				$this->font_variant = $this->font->get_variant( $variant_request );
+			}else {
+				$variants = implode( '</li><li>', array_keys( (array) $this->font->variants ) );
+				wp_die( 'Variant not found. Variants: <ul><li>' . $variants . '</li></ul>' );
+			}
+		}else {
+			// Get default variant
+			$this->font_variant = $this->font->default_variant;
+		}
+
+		return $this->font_variant;
 	}
 
 	public function get_image() {

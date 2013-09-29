@@ -8,6 +8,7 @@ require_once dirname(__FILE__) . '/sfm-group-standard.php';
 require_once dirname(__FILE__) . '/sfm-group-google.php';
 require_once dirname(__FILE__) . '/sfm-single-standard.php';
 require_once dirname(__FILE__) . '/sfm-single-google.php';
+require_once dirname(__FILE__) . '/sfm-image-preview.php';
 
 add_action( 'init', 'SFM_Plugin::get_instance', 11 );
 
@@ -54,7 +55,7 @@ class SFM_Plugin {
 	/**
 	 * @var SFM_Image_Preview Generate image preview of a font.
 	 */
-	var $font_preview;
+	var $image_preview;
 
 	/**
 	 * Set with site_url() because we might not be running as a plugin.
@@ -107,17 +108,13 @@ class SFM_Plugin {
 		$this->admin = new SFM_Admin( $this );
 		$this->google_fonts = new SFM_Group_Google();
 		$this->standard_fonts = new SFM_Group_Standard();
+		$this->image_preview = new SFM_Image_Preview();
 
 		/**
 		 * Output dropdown menu anywhere styles_font_menu action is called.
 		 * @example <code>do_action( 'styles_font_menu' );</code>
 		 */
 		add_action( 'styles_font_menu', array( $this, 'get_view_menu' ) );
-
-		/**
-		 * Generate an image preview of a font
-		 */
-		add_action( 'init', array( $this, 'font_preview' ), 12 );
 	}
 
 	public function print_scripts() {
@@ -144,16 +141,6 @@ class SFM_Plugin {
 		echo '<style>' . $this->standard_fonts->get_menu_css() . '</style>';
 
 		$this->scripts_printed = true;
-	}
-
-	public function font_preview() {
-		if ( !isset( $_GET['styles-font-preview'] ) ) {
-			return false;
-		}
-		if ( !class_exists( 'SFM_Image_Preview') ) {
-			require_once dirname( __FILE__ ) . '/sfm-image-preview.php';
-		}
-		$this->font_preview = new SFM_Image_Preview( $this );
 	}
 
 	/**

@@ -43,11 +43,11 @@ class SFM_Image_Preview {
 		}
 
 		// Output PNG URL
-		if ( !file_exists( $this->font->variant['png_path'] ) ) {
+		if ( !$this->font->get_png_url() ) {
 			$this->generate_image();
 		}
 
-		echo $this->font->variant['png_url'];
+		echo $this->font->get_png_url();
 		exit;
 	}
 
@@ -108,13 +108,13 @@ class SFM_Image_Preview {
 		if ( !function_exists('WP_Filesystem')) { require ABSPATH . 'wp-admin/includes/file.php'; }
 		global $wp_filesystem; WP_Filesystem();
 
-		$dir = dirname( $this->font->variant['png_path'] );
+		$dir = dirname( $this->font->get_png_cache_path() );
 
 		if ( !is_dir( $dir ) && !wp_mkdir_p( $dir ) ) { 
 			wp_die( "Please check permissions. Could not create directory $dir" );
 		}
 
-		$image_file = $wp_filesystem->put_contents( $this->font->variant['png_path'], $image, FS_CHMOD_FILE ); // predefined mode settings for WP files
+		$image_file = $wp_filesystem->put_contents( $this->font->get_png_cache_path(), $image, FS_CHMOD_FILE ); // predefined mode settings for WP files
 
 		if ( !$image_file ) {
 			wp_die( "Please check permissions. Could not write image to $dir" );

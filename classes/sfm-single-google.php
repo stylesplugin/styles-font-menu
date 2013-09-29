@@ -18,6 +18,11 @@ class SFM_Single_Google extends SFM_Single_Standard {
 	protected $files;
 
 	/**
+	 * Path and URL to the plugin directory and uploads directory
+	 */
+	protected $file_paths;
+
+	/**
 	 * @string Variation of name for insertion into @import CSS string.
 	 */
 	protected $import_family;
@@ -78,24 +83,106 @@ class SFM_Single_Google extends SFM_Single_Standard {
 			wp_die( 'Variant not found. Variants: <ul><li>' . $variants . '</li></ul>' );
 		}
 
-		// Paths
-		$uploads = wp_upload_dir();
-		$fonts_directory = $uploads['basedir'] . '/styles-fonts';
-		$fonts_directory_url = $uploads['baseurl'] . '/styles-fonts';
-
 		// Variant meta
-		$variant = array();
-		$variant['name']     = $variant_name;
-		$variant['filename'] = $this->get_nicename() . '-' . $variant_name;
-		// Todo: detect path; check if file exists in plugin or uploads dir
-		$variant['png_path'] = $fonts_directory . '/png/' . $variant['filename'] . '.png';
-		$variant['png_url']  = $fonts_directory_url . '/png/' . $variant['filename'] . '.png';;
-		$variant['ttf_path'] = $fonts_directory . '/ttf/' . $variant['filename'] . '.ttf';
-		$variant['ttf_url']  = $this->files->{$variant_name};
-
-		$this->variant = $variant;
+		$this->variant = array();
+		$this->variant['name']     = $variant_name;
+		$this->variant['filename'] = $this->get_nicename() . '-' . $variant_name;
+		$this->variant['png_path'] = $this->get_png_path();
+		$this->variant['png_url']  = $this->get_png_url();
+		$this->variant['ttf_path'] = $this->get_ttf_path();
+		$this->variant['ttf_url']  = $this->get_ttf_url();
 
 		return $this->variant;
+	}
+
+	public function get_file_paths() {
+		if ( isset( $this->file_paths ) ) {
+			return $this->file_paths;
+		}
+		
+		$plugin = SFM_Plugin::get_instance();
+
+		$uploads = wp_upload_dir();
+		$fonts_dir = '/styles-fonts';
+
+		$this->file_paths = array(
+			'plugin' => array(
+				'path' => $plugin->plugin_directory . $fonts_dir,
+				'url'  => $plugin->url . $fonts_dir,
+			),
+			'uploads' => array(
+				'path' => $uploads['basedir'] . $fonts_dir,
+				'url'  => $uploads['baseurl'] . $fonts_dir,
+			),
+		);
+		return $this->file_paths;
+	}
+
+	/**
+	 * @return string Path or URL to file if it exists in paths listed in get_file_paths()
+	 */
+	public function get_file( $path_or_url = 'path', $ext = 'png', $return_cache_path = false ) {
+		$variant = $this->get_variant();
+
+		$target = "/$ext/" . $variant['filename'] . ".$ext";
+		$locations = $this->get_file_paths();
+
+		foreach ( $locations as $location ) {
+			$path = $location[ 'path' ] . $target;
+			$url  = $location[ 'url' ]  . $target;
+			if ( file_exists( $path ) ) {
+				if ( 'path' == $path_or_url ) {
+					return $path;
+				}else {
+					return $url;
+				}
+			}
+		}
+
+		if ( $return_cache_path ) {
+			return $locations['uploads']['path'] . $target;
+		}
+
+		return false;
+	}
+
+	/**
+	 * @return string URL of image preview PNG for the active variant
+	 */
+	public function get_png_url() {
+		return $this->get_file( 'url', 'png' );
+	}
+
+	/**
+	 * @return string path of image preview PNG for the active variant
+	 */
+	public function get_png_path() {
+		return $this->get_file( 'path', 'png');
+	}
+
+	public function get_png_cache_path() {
+		return $this->get_file( 'path', 'png', true );
+	}
+
+	/**
+	 * @return string path of TTF for the active variant
+	 */
+	public function get_ttf_path() {
+		return $this->get_file( 'path', 'ttf' );
+	}
+
+	public function get_ttf_cache_path() {
+		return $this->get_file( 'path', 'ttf', true );
+	}
+
+	/**
+	 * @return string Remote (google) URL of TTF for the active variant
+	 */
+	public function get_ttf_url() {
+		$variant = $this->get_variant();
+		$variant_name = $variant['name'];
+
+		return $this->files->{$variant_name};
 	}
 
 	/**
@@ -113,9 +200,10 @@ class SFM_Single_Google extends SFM_Single_Standard {
 	 * @return string path to the cached or downloaded TTF file
 	 */
 	public function maybe_get_remote_ttf() {
-		$variant = $this->get_variant();
-		if ( file_exists( $variant['ttf_path'] ) ) {
-			return $variant['ttf_path'];
+		$ttf_path = $this->get_ttf_path();
+
+		if ( file_exists( $ttf_path ) ) {
+			return $ttf_path;
 		}else {
 			return $this->get_remote_ttf();
 		}
@@ -125,23 +213,20 @@ class SFM_Single_Google extends SFM_Single_Standard {
 	 * @return string path to the cached TTF file received from remote request.
 	 */
 	public function get_remote_ttf() {
-		// Setup
-		$variant = $this->get_variant();
-		$dir = dirname( $variant['ttf_path'] );
-
 		// Load filesystem
 		if ( !function_exists('WP_Filesystem')) { require ABSPATH . 'wp-admin/includes/file.php'; }
 		global $wp_filesystem;
 		WP_Filesystem();
 
 		// Create cache directory
+		$dir = dirname( $this->get_ttf_path() );
 		if ( !is_dir( $dir ) && !wp_mkdir_p( $dir ) ) { 
 			wp_die( "Please check permissions. Could not create directory $dir" );
 		}
 
 		// Cache remote TTF to filesystem
 		$ttf_file_path = $wp_filesystem->put_contents(
-			$variant['ttf_path'],
+			$this->get_ttf_cache_path(),
 			$this->get_remote_ttf_contents(),
 			FS_CHMOD_FILE // predefined mode settings for WP files
 		);
@@ -151,39 +236,26 @@ class SFM_Single_Google extends SFM_Single_Standard {
 			wp_die( "Please check permissions. Could not write font to $dir" );
 		}
 		
-		return $variant['ttf_path'];
+		return $this->get_ttf_path();
 	}
 
 	/**
 	 * @return binary The active variant's TTF file contents
 	 */
 	public function get_remote_ttf_contents() {
-		$variant = $this->get_variant();
+		$ttf_url = $this->get_ttf_url();
 
-		if ( empty( $variant['ttf_url'] ) ) {
+		if ( empty( $ttf_url ) ) {
 			wp_die( 'Font URL not set.' );
 		}
 		
-		$response = wp_remote_get( $variant['ttf_url'] );
+		$response = wp_remote_get( $ttf_url );
 
 		if ( is_a( $response, 'WP_Error') ) {
-			wp_die( "Attempt to get remote font returned an error.<br/>{$variant['ttf_url']}" );
+			wp_die( "Attempt to get remote font returned an error.<br/>$ttf_url" );
 		}
 
 		return $response['body'];
-	}
-
-	/**
-	 * @return string URL of image preview PNG for the active variant
-	 */
-	public function get_png_url() {
-		$variant = $this->get_variant();
-
-		if ( file_exists( $variant['png_path'] ) ) {
-			return $variant['png_url'];
-		}
-
-		return false;
 	}
 	
 }

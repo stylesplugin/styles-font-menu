@@ -62,6 +62,13 @@ class SFM_Plugin {
 	 * 
 	 * @var string URL for the styles-font-menu directory.
 	 */
+	var $plugin_url;
+
+	/**
+	 * Set with dirname(__FILE__) because we might not be running as a plugin.
+	 * 
+	 * @var string Path for the styles-font-menu directory.
+	 */
 	var $plugin_directory;
 
 	/**
@@ -102,8 +109,9 @@ class SFM_Plugin {
 	 * Initial setup. Called by get_instance.
 	 */
 	protected function init() {
-		$this->plugin_directory = site_url( str_replace( ABSPATH, '', dirname( dirname( __FILE__ ) ) ) );
-		$this->plugin_basename = plugin_basename( dirname( dirname( __FILE__ ) ) . '/plugin.php' );
+		$this->plugin_directory = dirname( dirname( __FILE__ ) );
+		$this->plugin_url = site_url( str_replace( ABSPATH, '', $this->plugin_directory ) );
+		$this->plugin_basename = plugin_basename( $this->plugin_directory . '/plugin.php' );
 
 		$this->admin = new SFM_Admin( $this );
 		$this->google_fonts = new SFM_Group_Google();
@@ -120,11 +128,11 @@ class SFM_Plugin {
 	public function print_scripts() {
 		if ( $this->scripts_printed ) { return false; }
 
-		wp_register_script( 'styles-chosen', $this->plugin_directory . '/js/chosen/chosen.jquery.min.js', array( 'jquery' ), $this->version );
-		wp_register_script( 'styles-font-menu', $this->plugin_directory . '/js/styles-font-menu.js', array( 'jquery', 'styles-chosen' ), $this->version );
-		wp_register_style( 'styles-chosen', $this->plugin_directory . '/js/chosen/chosen.css', array(), $this->version );
-		wp_register_style( 'styles-font-menu', $this->plugin_directory . '/css/styles-font-menu.css', array(), $this->version );
-		// wp_register_style( 'styles-chosen', $this->plugin_directory . '/js/chosen/chosen.min.css', array(), $this->version );
+		wp_register_script( 'styles-chosen', $this->plugin_url . '/js/chosen/chosen.jquery.min.js', array( 'jquery' ), $this->version );
+		wp_register_script( 'styles-font-menu', $this->plugin_url . '/js/styles-font-menu.js', array( 'jquery', 'styles-chosen' ), $this->version );
+		wp_register_style( 'styles-chosen', $this->plugin_url . '/js/chosen/chosen.css', array(), $this->version );
+		wp_register_style( 'styles-font-menu', $this->plugin_url . '/css/styles-font-menu.css', array(), $this->version );
+		// wp_register_style( 'styles-chosen', $this->plugin_url . '/js/chosen/chosen.min.css', array(), $this->version );
 
 		// Pass Google Font Families to javascript
 		// This saves on bandwidth by outputing them once,

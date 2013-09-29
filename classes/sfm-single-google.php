@@ -156,7 +156,7 @@ class SFM_Single_Google extends SFM_Single_Standard {
 			wp_die( "Please check permissions. Could not write font to $dir" );
 		}
 		
-		return $ttf_file_path;
+		return $variant['ttf_path'];
 	}
 
 	/**

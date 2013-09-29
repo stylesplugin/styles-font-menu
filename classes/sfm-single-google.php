@@ -8,6 +8,11 @@ class SFM_Single_Google extends SFM_Single_Standard {
 	protected $variants;
 
 	/**
+	 * @var array Info on active variant, for image previews
+	 */
+	protected $variant;
+
+	/**
 	 * @var string Key for variant to use if none set
 	 */
 	protected $default_variant;
@@ -44,25 +49,48 @@ class SFM_Single_Google extends SFM_Single_Standard {
 		return str_replace( ' ', '+', $this->family ) . ':' . implode( ',', $this->variants );
 	}
 
-	public function get_variant( $variant ) {
-		if ( in_array( $variant, (array) $this->variants ) ) {
-			return $variant;
+	public function get_variant( $variant = false ) {
+		if ( isset( $this->variant ) ) {
+			return $this->variant;
 		}
-		return false;
+
+		if ( empty( $variant ) && isset( $_GET['variant'] ) ) {
+			$variant = $_GET['variant'];
+		}
+
+		if ( in_array( $variant, (array) $this->variants ) ) {
+			$this->variant = array(
+				'name' => $variant,
+				'url' => $this->files->{$variant},
+			);
+			return $this->variant;
+		}
+
+		// Requested a variant, but none found
+		if ( isset( $_GET['variant'] ) ) {
+			$variants = implode( '</li><li>', array_keys( (array) $this->variants ) );
+			wp_die( 'Variant not found. Variants: <ul><li>' . $variants . '</li></ul>' );
+		}
+
+		return $this->get_default_variant();
 	}
 
 	public function get_default_variant() {
-		if ( isset( $this->default_variant ) ) {
-			return $this->default_variant;
+		if ( isset( $this->variant ) ) {
+			return $this->variant;
 		}
 
 		if ( in_array( 'regular', (array) $this->variants ) ) {
-			$this->default_variant = 'regular';
+			$variant = 'regular';
 		}else {
-			$this->default_variant = $this->variants[0];
+			$variant = $this->variants[0];
 		}
 
-		return $this->default_variant;
+		$this->variant = array(
+			'name' => $variant,
+			'url' => $this->files->{$variant},
+		);
+		return $this->variant;
 	}
 	
 }

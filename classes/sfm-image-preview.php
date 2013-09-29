@@ -13,11 +13,6 @@ class SFM_Image_Preview {
 	var $fonts_directory;
 
 	/**
-	 * @var string Name of the font we're previewing.
-	 */
-	var $font_family;
-
-	/**
 	 * @var array Display attributes for the preview image and font
 	 */
 	var $preview_attributes = array(
@@ -31,38 +26,31 @@ class SFM_Image_Preview {
 	);
 
 	public function __construct() {
-		$uploads = wp_upload_dir();
-		$this->fonts_directory = $uploads['basedir'] . '/styles-fonts';
-		$this->fonts_directory_url = $uploads['baseurl'] . '/styles-fonts';
+		$this->set_paths();
 
-		if ( isset( $_GET[ $this->action_key ] ) ) {
-			$this->get_font();
-			$this->get_image();
-		}
+		add_action( 'wp_ajax_styles-font-preview', array( $this, 'wp_ajax_styles_font_preview' ) );
+	}
 
+	public function wp_ajax_styles_font_preview() {
+		$this->parse_request();
+		$this->get_image();
 		exit;
 	}
 
-	public function get_font() {
-		if ( empty( $_GET[ $this->action_key ] ) ) {
-			wp_die( 'Please specify a font name.');
-		}
-		$this->font_family = $_GET[ $this->action_key ];
+	public function set_paths() {
+		$uploads = wp_upload_dir();
+		$this->fonts_directory = $uploads['basedir'] . '/styles-fonts';
+		$this->fonts_directory_url = $uploads['baseurl'] . '/styles-fonts';
+	}
 
-		$plugin = SFM_Plugin::get_instance();
+	public function parse_request() {
+		$this->parse_request_font();
 
-		$this->font = $plugin->google_fonts->get_font_by_name( $this->font_family );
-		if ( !$this->font ) {
-			wp_die( 'Font not found: ' . $this->font_family );
-		}
+		//----> Move below into Font class
 
-		$this->get_font_variant();
+		$nicename = strtolower( preg_replace( '/[^a-zA-Z0-9]/', '', $this->font->family ) );
 
-		$this->font_url = $this->font->files->{$this->font_variant};
-
-		$nicename = strtolower( preg_replace( '/[^a-zA-Z0-9]/', '', $this->font_family ) );
-
-		$this->font_filename =  "$nicename-{$this->font_variant}.ttf";
+		$this->font_filename =  "$nicename-{$this->font->variant['name']}.ttf";
 		$this->font_ttf_path = $this->fonts_directory . '/ttf/' . $this->font_filename;
 
 		// Variant removed from png names
@@ -72,26 +60,20 @@ class SFM_Image_Preview {
 		$this->maybe_get_remote_font();
 	}
 
-	public function get_font_variant() {
-		if ( isset( $this->font_variant ) ) {
-			return $this->font_variant;
-		}
-		$variant_request = ( isset( $_GET['variant'] ) ) ? $_GET['variant'] : false;
+	/**
+	 * Load Google font specified in $_GET request
+	 */
+	public function parse_request_font() {
+		$plugin = SFM_Plugin::get_instance();
+		$font_family = ( isset( $_GET[ 'font-family' ] ) ) ? $_GET[ 'font-family' ] : false;
 
-		if ( $variant_request ) {
-			// Validate requested variant
-			if ( $this->font->get_variant( $variant_request ) ) {
-				$this->font_variant = $this->font->get_variant( $variant_request );
-			}else {
-				$variants = implode( '</li><li>', array_keys( (array) $this->font->variants ) );
-				wp_die( 'Variant not found. Variants: <ul><li>' . $variants . '</li></ul>' );
-			}
-		}else {
-			// Get default variant
-			$this->font_variant = $this->font->default_variant;
+		// Load font family from Google Fonts
+		$this->font = $plugin->google_fonts->get_font_by_name( $font_family );
+
+		if ( !$this->font ) {
+			wp_die( 'Font not found: ' . $this->font_family );
 		}
 
-		return $this->font_variant;
 	}
 
 	public function get_image() {
@@ -111,7 +93,7 @@ class SFM_Image_Preview {
 		$background = imageColorAllocate($image, $background_color[0], $background_color[1], $background_color[2]);
 		$foreground = imageColorAllocate($image, $font_color[0], $font_color[1], $font_color[2]);
 
-		imagettftext($image, $font_size, 0, $left_margin, $font_baseline, $foreground, $this->font_ttf_path, $this->font_family );
+		imagettftext($image, $font_size, 0, $left_margin, $font_baseline, $foreground, $this->font_ttf_path, $this->font->family );
 
 		ob_start();
 		imagePNG($image);
@@ -164,14 +146,14 @@ class SFM_Image_Preview {
 	}
 
 	public function get_remote_font() {
-		if ( empty( $this->font_url ) ) {
+		if ( empty( $this->font->variant['url'] ) ) {
 			wp_die( 'Font URL not set.' );
 		}
 		
-		$response = wp_remote_get( $this->font_url );
+		$response = wp_remote_get( $this->font->variant['url'] );
 
 		if ( is_a( $response, 'WP_Error') ) {
-			wp_die( "Attempt to get remote font returned an error.<br/>{$this->font_url}" );
+			wp_die( "Attempt to get remote font returned an error.<br/>{$this->font->variant['url']}" );
 		}
 
 		return $response['body'];

@@ -101,6 +101,10 @@ class SFM_Group_Google extends SFM_Group {
 	 * @return SFM_Single_Google
 	 */
 	public function get_font_by_name( $name ) {
+		if ( empty( $name ) ) {
+			wp_die( 'Please specify a font family to preview.');
+		}
+
 		foreach ( $this->get_fonts() as $font ) {
 			if ( $name == $font->family ) {
 				return $font;

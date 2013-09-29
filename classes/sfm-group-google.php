@@ -127,6 +127,7 @@ class SFM_Group_Google extends SFM_Group {
 		}
 
 		$this->option_values[ 'import_template' ] = self::import_template;
+		$this->option_values[ 'admin_ajax' ] = admin_url( 'admin-ajax.php' );
 
 		return $this->option_values;
 	}
@@ -170,8 +171,8 @@ class SFM_Group_Google extends SFM_Group {
 	 * @todo Write with WP_Filesystem instead of file_put_contents
 	 */
 	public function set_api_fallback() {
-		if ( is_writable( $this->api_fallback_file ) ) {
-			file_put_contents( $this->api_fallback_file, json_encode( $this->fonts ) );
+		if ( !empty( $this->font_data ) && is_writable( $this->api_fallback_file ) ) {
+			file_put_contents( $this->api_fallback_file, json_encode( $this->font_data ) );
 		}
 	}
 	

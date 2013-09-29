@@ -25,10 +25,11 @@ class SFM_Image_Preview {
 	}
 
 	/**
-	 * Load Google font specified in $_GET request
+	 * Load Google font specified in $_GET request.
 	 * 
 	 * @param string $_GET['font-family'] Required. Name of the font to render
 	 * @param string $_GET['variant'] Optional. Name of the variant to render
+	 * @return null Output URL to image as string
 	 */
 	public function wp_ajax_styles_font_preview() {
 		$plugin = SFM_Plugin::get_instance();
@@ -41,19 +42,18 @@ class SFM_Image_Preview {
 			wp_die( 'Font not found: ' . $this->font_family );
 		}
 
-		$this->maybe_get_remote_font();
-		$this->get_image();
+		// Output PNG URL
+		if ( !file_exists( $this->font->variant['png_path'] ) ) {
+			$this->generate_image();
+		}
+
+		echo $this->font->variant['png_url'];
 		exit;
 	}
 
-	public function get_image() {
-		if ( file_exists( $this->font->variant['png_path'] ) ) {
-			exit( $this->font->variant['png_url'] );
-		}
-
-		$this->generate_image();
-	}
-
+	/**
+	 * Create PNG of font name written with font TTF.
+	 */
 	public function generate_image() {
 		$width = $height = $font_size = $left_margin = $font_baseline = $background_color = $font_color = false;
 		extract( $this->preview_attributes, EXTR_IF_EXISTS );
@@ -63,70 +63,41 @@ class SFM_Image_Preview {
 		$background = imageColorAllocate($image, $background_color[0], $background_color[1], $background_color[2]);
 		$foreground = imageColorAllocate($image, $font_color[0], $font_color[1], $font_color[2]);
 
-		imagettftext($image, $font_size, 0, $left_margin, $font_baseline, $foreground, $this->font->variant['ttf_path'], $this->font->family );
+		$ttf_path = $this->font->maybe_get_remote_ttf();
+		if ( !file_exists( $ttf_path ) ) {
+			wp_die( 'Could not load $ttf_path: ' . $ttf_path );
+		}
+
+		imagettftext($image, $font_size, 0, $left_margin, $font_baseline, $foreground, $ttf_path, $this->font->family );
 
 		ob_start();
 		imagePNG($image);
 		$image = ob_get_clean();
 
-		// Save image file
+		$this->save_image( $image );
+
+		// header("Content-type: image/png");
+		// echo $image;
+	}
+
+	/**
+	 * Save preview image file.
+	 */
+	public function save_image( $image ) {
+		if ( !function_exists('WP_Filesystem')) { require ABSPATH . 'wp-admin/includes/file.php'; }
+		global $wp_filesystem; WP_Filesystem();
+
 		$dir = dirname( $this->font->variant['png_path'] );
 
 		if ( !is_dir( $dir ) && !wp_mkdir_p( $dir ) ) { 
 			wp_die( "Please check permissions. Could not create directory $dir" );
 		}
 
-		if ( !function_exists('WP_Filesystem')) { require ABSPATH . 'wp-admin/includes/file.php'; }
-		global $wp_filesystem; WP_Filesystem();
 		$image_file = $wp_filesystem->put_contents( $this->font->variant['png_path'], $image, FS_CHMOD_FILE ); // predefined mode settings for WP files
 
 		if ( !$image_file ) {
 			wp_die( "Please check permissions. Could not write image to $dir" );
 		}
-
-		// header("Content-type: image/png");
-		// echo $image;
-
-		echo $this->font->variant['png_url'];
-
-		exit;
-	}
-
-	public function maybe_get_remote_font() {
-		if ( file_exists( $this->font->variant['ttf_path'] ) ) {
-			return $this->font->variant['ttf_path'];
-		}
-
-		$dir = dirname( $this->font->variant['ttf_path'] );
-
-		if ( !function_exists('WP_Filesystem')) { require ABSPATH . 'wp-admin/includes/file.php'; }
-		global $wp_filesystem; WP_Filesystem();
-
-		if ( !is_dir( $dir ) && !wp_mkdir_p( $dir ) ) { 
-			wp_die( "Please check permissions. Could not create directory $dir" );
-		}
-
-		$font_file = $wp_filesystem->put_contents( $this->font->variant['ttf_path'], $this->get_remote_font(), FS_CHMOD_FILE ); // predefined mode settings for WP files
-
-		if ( $font_file ) {
-			return $font_file;
-		}else {
-			wp_die( "Please check permissions. Could not write font to $dir" );
-		}
-	}
-
-	public function get_remote_font() {
-		if ( empty( $this->font->variant['ttf_url'] ) ) {
-			wp_die( 'Font URL not set.' );
-		}
-		
-		$response = wp_remote_get( $this->font->variant['ttf_url'] );
-
-		if ( is_a( $response, 'WP_Error') ) {
-			wp_die( "Attempt to get remote font returned an error.<br/>{$this->font->variant['ttf_url']}" );
-		}
-
-		return $response['body'];
 	}
 
 }

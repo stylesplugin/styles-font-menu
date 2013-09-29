@@ -14,7 +14,7 @@ jQuery( document ).ready( function( $ ){
 	for (var i=0; i < google_fonts.fonts.length; i++){
 		google_options += "<option class='gf " + google_fonts.fonts[i].classname + "' value='" + JSON.stringify( google_fonts.fonts[i] ) + "'>" + google_fonts.fonts[i].name + "</option>";
 
-		google_styles += ".sfm ." + google_fonts.fonts[i].classname + " { background-image: url(/wp-content/uploads/styles-fonts/png/" + google_fonts.fonts[i].classname + ".png); }\r";
+		google_styles += ".sfm ." + google_fonts.fonts[i].classname + " { background-image: url(" + google_fonts.fonts[i].png_url + "); }\r";
 	}
 	google_options += "</optgroup>";
 	google_styles += "</style>";

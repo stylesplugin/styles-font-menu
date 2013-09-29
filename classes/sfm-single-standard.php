@@ -79,8 +79,9 @@ class SFM_Single_Standard {
 		$option_values = array();
 
 		foreach ( $this->option_value_whitelist as $key ) {
-			if ( !empty( $this->$key ) ) {
-				$option_values[ $key ] = $this->$key;
+			$value = $this->get( $key );
+			if ( !empty( $value ) ) {
+				$option_values[ $key ] = $value;
 			}
 		}
 

@@ -46,7 +46,10 @@
 
 			$('#generate-previews').after( '<br/>Generating '+ name );
 
-			$.get( document.URL, { "styles-font-preview": name }, function( data, textStatus, jqXHR ){
+			$.get( styles_google_options.admin_ajax, {
+				"action": "styles-font-preview",
+				"font-family": name
+			}, function( data, textStatus, jqXHR ){
 
 				var img = $('<img>').attr( 'src', data );
 

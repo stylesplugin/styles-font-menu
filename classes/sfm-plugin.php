@@ -120,7 +120,7 @@ class SFM_Plugin {
 		 * Output dropdown menu anywhere styles_font_menu action is called.
 		 * @example <code>do_action( 'styles_font_menu' );</code>
 		 */
-		add_action( 'styles_font_menu', array( $this, 'get_view_menu' ) );
+		add_action( 'styles_font_menu', array( $this, 'get_view_menu' ), 10, 2 );
 	}
 
 	public function print_scripts() {
@@ -152,7 +152,7 @@ class SFM_Plugin {
 	/**
 	 * Display views/menu.php
 	 */
-	public function get_view_menu() {
+	public function get_view_menu( $attributes='', $value = false ) {
 		$this->get_view( 'menu' );
 	}
 

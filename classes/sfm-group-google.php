@@ -57,7 +57,9 @@ class SFM_Group_Google extends SFM_Group {
 		}
 
 		// If no cache, try connecting to Google API
-		$this->font_data = $this->remote_get_google_api();
+		if ( apply_filters( 'sfm_update_google_fonts', false ) ) {
+			$this->font_data = $this->remote_get_google_api();
+		}
 
 		// If Google API failed, use the fallback file.
 		if ( !is_object( $this->font_data ) || !is_array( $this->font_data->items ) ) {
@@ -79,13 +81,13 @@ class SFM_Group_Google extends SFM_Group {
 	public function get_fonts() {
 		if ( !empty( $this->fonts ) ) { return $this->fonts; }
 
-		$this->fonts = array();
+		$fonts = array();
 
 		foreach ( (array) $this->get_font_data()->items as $font ){
 			// Exclude non-latin fonts
 			if ( !in_array('latin', $font->subsets ) ) { continue; }
 			
-			$this->fonts[] = new SFM_Single_Google( array( 
+			$fonts[] = new SFM_Single_Google( array( 
 				'family' => $font->family,
 				'name' => $font->family,
 				'variants' => $font->variants,
@@ -93,6 +95,8 @@ class SFM_Group_Google extends SFM_Group {
 			) );
 
 		}
+
+		$this->fonts = $fonts;
 
 		return $this->fonts;
 	}

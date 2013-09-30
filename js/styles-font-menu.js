@@ -55,6 +55,8 @@ jQuery( document ).ready( function( $ ){
 
 			plugin.populate_google_fonts();
 
+			plugin.set_selected_option();
+
 			$element.chosen( plugin.settings.chosen_settings );
 		};
 
@@ -66,6 +68,17 @@ jQuery( document ).ready( function( $ ){
 				$(this).find( 'option[value="' + selected + '"]' ).attr('selected', 'selected');
 			} );
 		};
+
+		plugin.set_selected_option = function() {
+			var value = JSON.stringify( $element.data( 'selected' ) );
+	
+			$element.find('option').each( function(){
+				if ( value == $(this).val() ) {
+					$(this).attr('selected', 'selected');
+				}
+
+			});
+		}
 
 		plugin.preview_font_change = function( $target_elements ) {
 			// Clear font-family if nothing selected

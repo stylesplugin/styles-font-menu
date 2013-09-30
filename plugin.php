@@ -77,6 +77,12 @@ function styles_font_menu_init() {
 	}
 
 }
-add_action( 'init', 'styles_font_menu_init' );
+
+if ( did_action( 'init' ) ) {
+	styles_font_menu_init();
+}else {
+	add_action( 'init', 'styles_font_menu_init' );
+}
+
 
 endif;

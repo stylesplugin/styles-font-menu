@@ -10,8 +10,6 @@ require_once dirname(__FILE__) . '/sfm-single-standard.php';
 require_once dirname(__FILE__) . '/sfm-single-google.php';
 require_once dirname(__FILE__) . '/sfm-image-preview.php';
 
-add_action( 'init', 'SFM_Plugin::get_instance', 11 );
-
 /**
  * Controller class
  * Holds instances of models in vars
@@ -169,5 +167,7 @@ class SFM_Plugin {
 		}
 	}
 }
+
+SFM_Plugin::get_instance();
 
 endif;

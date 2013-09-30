@@ -14,8 +14,6 @@
 		<?php endforeach; ?>
 	</optgroup>
 
-	<?php echo $this->google_fonts->fonts ?>
-
 	<?php /* 
 		Google Fonts loaded by styles-font-menu.js
 

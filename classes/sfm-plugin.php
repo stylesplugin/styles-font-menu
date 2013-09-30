@@ -152,15 +152,17 @@ class SFM_Plugin {
 	/**
 	 * Display views/menu.php
 	 */
-	public function get_view_menu( $attributes='', $value = false ) {
-		$this->get_view( 'menu' );
+	public function get_view_menu( $attributes = '', $value = false ) {
+		$args = compact( 'attributes', 'value' );
+		$this->get_view( 'menu', $args );
 	}
 
 	/**
 	 * Display any view from the views/ directory.
 	 * Allows views to have access to $this
 	 */
-	public function get_view( $file = 'menu' ) {
+	public function get_view( $file = 'menu', $args = array() ) {
+		extract( $args );
 		$file = dirname( dirname( __FILE__ ) ) . "/views/$file.php";
 		if ( file_exists( $file ) ) {
 			include $file;

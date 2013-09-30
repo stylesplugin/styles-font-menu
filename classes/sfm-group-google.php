@@ -79,6 +79,8 @@ class SFM_Group_Google extends SFM_Group {
 	public function get_fonts() {
 		if ( !empty( $this->fonts ) ) { return $this->fonts; }
 
+		$this->fonts = array();
+
 		foreach ( (array) $this->get_font_data()->items as $font ){
 			// Exclude non-latin fonts
 			if ( !in_array('latin', $font->subsets ) ) { continue; }

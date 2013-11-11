@@ -1,7 +1,5 @@
 <?php
 
-if ( !class_exists( 'SFM_Plugin' ) ) :
-
 require_once dirname(__FILE__) . '/sfm-admin.php';
 require_once dirname(__FILE__) . '/sfm-group.php';
 require_once dirname(__FILE__) . '/sfm-group-standard.php';
@@ -169,7 +167,3 @@ class SFM_Plugin {
 		}
 	}
 }
-
-SFM_Plugin::get_instance();
-
-endif;

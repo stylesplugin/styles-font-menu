@@ -21,7 +21,7 @@ class SFM_Plugin {
 	/**
 	 * @var string The plugin version.
 	 */
-	var $version = '0.1';
+	var $version = '1.0';
 
 	/**
 	 * @var Styles_Font_Menu Instance of the class.

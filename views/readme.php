@@ -1,21 +1,17 @@
-<div class="wrap" id="styles-font-dropdown-readme">
+<div class="wrap" id="styles-font-menu-readme">
 
 	<?php screen_icon(); ?>
-	<h2><?php _e('Font Dropdown Menu', 'styles-font-dropdown'); ?></h2>
+	<h2><?php _e('Font Menu', 'styles-font-menu'); ?></h2>
+
+	<p><a href="#" id="generate-previews">Generate Missing Font Previews</a></p>
 
 	<h3 class="example-output">Example output</h3>
 	<p><?php do_action( 'styles_font_menu' ); ?></p>
 
 	<?php echo Markdown( file_get_contents( dirname( dirname( __FILE__ ) ) . '/readme.md' ) ); ?>
 
-</div>
 
-<style>
-	#styles-font-dropdown-readme > ul {
-		list-style-type: disc;
-		margin-left: 30px;
-	}
-</style>
+</div>
 
 <script>
 
@@ -24,11 +20,78 @@
 	 */
 	(function($){
 
-		var $headings = $( 'h2,h3', '#styles-font-dropdown-readme' );
+		var $headings = $( 'h2,h3', '#styles-font-menu-readme' );
 		
-		$('select.styles-font-dropdown').change( function(){
+		$('select.sfm').change( function(){
 			$(this).data('stylesFontDropdown').preview_font_change( $headings );
 		});
+
+	})(jQuery);
+
+	/**
+	 * Generate Font Previews
+	 */
+	(function($){
+
+		var preview_gen = {
+			"max_connections": 6,
+			"google_fonts": [],
+			"done": false,
+
+			"init": function(){
+				$.each( styles_google_options.fonts, function( index, font ){
+					// Only generate missing previews
+					if ( undefined === font.png_url ) {
+						preview_gen.google_fonts.push( font.name )
+					}
+				});
+
+				$('#generate-previews').click( function(){
+					for (var i = 0; i < preview_gen.max_connections; i++ ) {
+						preview_gen.generate_preview();
+					};
+					return false;
+				} );
+
+				// Testing
+				// setTimeout( function(){ $('#generate-previews').click(); }, 500 );
+			},
+
+			"generate_preview": function(){
+
+				if ( preview_gen.done ) {
+					return;
+				}
+
+				if ( 0 == preview_gen.google_fonts.length && !preview_gen.done ) {
+					preview_gen.done = true;
+					$('#generate-previews').after( '<p>Done</p>' );
+					return;
+				}
+
+				var name = preview_gen.google_fonts.pop(),
+				    $status_text;
+
+				$status_text = $( '<p>Generating ' + name + '<br/></p>' );
+				$('#generate-previews').after( $status_text );
+
+				$.get( styles_google_options.admin_ajax, {
+					"action": "styles-font-preview",
+					"font-family": name
+				}, function( data, textStatus, jqXHR ){
+
+					var img = $('<img>').attr( 'src', data ).addClass('sfm-preview');
+
+					$status_text.append( img );
+
+					preview_gen.generate_preview();
+
+				} );
+			}
+
+		}
+		
+		preview_gen.init();
 
 	})(jQuery);
 

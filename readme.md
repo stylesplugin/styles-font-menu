@@ -60,6 +60,14 @@ Note that you may need to flush your transients for the new sort order to appear
 
 [Read more about the Google Fonts developer API](https://developers.google.com/fonts/docs/getting_started).
 
+## Use in your theme front-end
+
+This plugin skips loading on your front-end site by default to maximize performance. If you'd like to use the menu in your theme's front-end interface, add this to `functions.php`:
+
+```php
+add_filter( 'styles_font_menu_include_on_frontend', '__return_true' );
+```
+
 ## About the drop-down menu
 
 The dropdown menu uses [Chosen](http://harvesthq.github.io/chosen/) by Harvest.

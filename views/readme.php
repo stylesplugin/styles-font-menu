@@ -23,7 +23,7 @@
 		var $headings = $( 'h2,h3', '#styles-font-menu-readme' );
 		
 		$('select.sfm').change( function(){
-			$(this).data('stylesFontDropdown').preview_font_change( $headings );
+			$(this).data('stylesFontMenu').preview_font_change( $headings );
 		});
 
 	})(jQuery);

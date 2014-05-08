@@ -1,7 +1,7 @@
 jQuery( document ).ready( function( $ ){
 
 	// Add Google Fonts and Chosen to select elements
-	$('select.sfm').stylesFontDropdown();
+	$('select.sfm').stylesFontMenu();
 
 });
 
@@ -40,13 +40,13 @@ jQuery( document ).ready( function( $ ){
 	/**
 	 * Define jQuery plugin to act on and attach to select elements
 	 */
-	$.stylesFontDropdown = function(element, options) {
+	$.stylesFontMenu = function(element, options) {
 
 		var plugin = this,
 				$element = $(element);
 
 		/**
-		 * Default settings. Override by passing object to stylesFontDropdown()
+		 * Default settings. Override by passing object to stylesFontMenu()
 		 */
 		var defaults = {
 					"chosen_settings": {
@@ -121,13 +121,13 @@ jQuery( document ).ready( function( $ ){
 
 	/**
 	 * Attach this plugin instance to the target elements
-	 * Access later with $('select.styles-font-menu').data('stylesFontDropdown');
+	 * Access later with $('select.styles-font-menu').data('stylesFontMenu');
 	 */
-	$.fn.stylesFontDropdown = function(options) {
+	$.fn.stylesFontMenu = function(options) {
 		return this.each(function() {
-			if (undefined === $(this).data('stylesFontDropdown')) {
-				var plugin = new $.stylesFontDropdown(this, options);
-				$(this).data('stylesFontDropdown', plugin);
+			if (undefined === $(this).data('stylesFontMenu')) {
+				var plugin = new $.stylesFontMenu(this, options);
+				$(this).data('stylesFontMenu', plugin);
 			}
 		});
 	};

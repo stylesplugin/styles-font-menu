@@ -43,7 +43,7 @@ It may also be preferable to update previews when the form changes with JavaScri
     	// For example, $('#sfm-field-id').change( function(){
     	$('select.sfm').change( function(){
     		// When the menu changes, preview the font on elements identified above.
-    		$(this).data('stylesFontDropdown').preview_font_change( $headings );
+    		$(this).data('stylesFontMenu').preview_font_change( $headings );
     	});
 
     })(jQuery);

@@ -2,7 +2,7 @@
 
 ![Example output](https://raw.github.com/stylesplugin/styles-font-dropdown/master/img/example-output.gif?v3)
 
-This menu can be displayed in your templates with this code: `do_action( 'styles_font_menu' );`
+This menu can be displayed in your templates with this code: `do_action( 'styles_font_menu' );` See below for how to set your field name, default value, and provide a live preview.
 
 ## Live Demo
 
@@ -13,6 +13,35 @@ To view a live demo of the menu in action, install and activate this WordPress p
 ## Including in plugins and themes
 
 Styles Font Dropdown has been packaged as a plugin only for testing purposes. In real world use, you should put it in your own theme or plugin, then include it with `include 'styles-font-menu/plugin.php';`
+
+By default, SFM only loads in `wp-admin` to maximize performance. If you'd like to use the menu in your theme's front-end interface, add this to `functions.php`:
+
+    add_filter( 'styles_font_menu_include_on_frontend', '__return_true' );
+
+## Output with field name, default value, and live preview
+
+The PHP action takes two optional arguments for attributes and default value. For example:
+
+    $attributes = array(
+    	'name' => 'sfm-field-name',
+    	'id' => 'sfm-field-id',
+    	// 'data-custom' => 'Some custom data attribute value',
+    );
+    $default_value = '{"family":"Arial, Helvetica, sans-serif","name":"Arial","classname":"arial"}';
+    
+    do_action( 'styles_font_menu', $attributes, $default_value );
+
+It may also be preferable to update previews when the form changes with JavaScript:
+
+    // Elements we'd like to update
+    var $headings = $( 'h2, h3' );
+	
+    // Attach to change event of all font menus
+    // You might make this specific to one menu by selecting with an ID passed in attributes.
+    $('select.sfm').change( function(){
+    	// When the menu changes, preview the font on elements identified above.
+    	$(this).data('stylesFontDropdown').preview_font_change( $headings );
+    });
 
 ## Select Menu Values
 
@@ -59,14 +88,6 @@ The possible sorting values are:
 Note that you may need to flush your transients for the new sort order to appear immediately.
 
 [Read more about the Google Fonts developer API](https://developers.google.com/fonts/docs/getting_started).
-
-## Use in your theme front-end
-
-This plugin skips loading on your front-end site by default to maximize performance. If you'd like to use the menu in your theme's front-end interface, add this to `functions.php`:
-
-```php
-add_filter( 'styles_font_menu_include_on_frontend', '__return_true' );
-```
 
 ## About the drop-down menu
 

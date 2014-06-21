@@ -35,6 +35,8 @@ class SFM_Group_Standard extends SFM_Group {
 			) );
 		}
 
+		$this->fonts = apply_filters( 'sfm_get_fonts', $this->fonts, $this );
+
 		return $this->fonts;
 	}
 

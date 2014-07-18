@@ -12,7 +12,7 @@ require_once dirname(__FILE__) . '/sfm-image-preview.php';
  * Controller class
  * Holds instances of models in vars
  * Loads views from views/ directory
- * 
+ *
  * Follows the Singleton pattern. @see http://jumping-duck.com/tutorial/wordpress-plugin-structure/
  * @example Access plugin instance with $font_dropdown = SFM_Plugin::get_instance();
  */
@@ -55,21 +55,21 @@ class SFM_Plugin {
 
 	/**
 	 * Set with site_url() because we might not be running as a plugin.
-	 * 
+	 *
 	 * @var string URL for the styles-font-menu directory.
 	 */
 	var $plugin_url;
 
 	/**
 	 * Set with dirname(__FILE__) because we might not be running as a plugin.
-	 * 
+	 *
 	 * @var string Path for the styles-font-menu directory.
 	 */
 	var $plugin_directory;
 
 	/**
 	 * Intentionally inaccurate if we're running as a plugin.
-	 * 
+	 *
 	 * @var string Plugin basename, only if we're running as a plugin.
 	 */
 	var $plugin_basename;
@@ -77,7 +77,7 @@ class SFM_Plugin {
 	/**
 	 * print_scripts() runs as late as possible to avoid processing Google Fonts.
 	 * This prevents running multiple times.
-	 * 
+	 *
 	 * @var bool Whether we have already registered scripts or not.
 	 */
 	var $scripts_printed = false;
@@ -203,6 +203,18 @@ class SFM_Plugin {
 	 * Display views/menu.php
 	 */
 	public function get_view_menu( $attributes = '', $value = false ) {
+		// If attributes is an array, convert to a sanitized string
+		if ( is_array( $attributes ) ) {
+
+			$attributes_string = '';
+
+			foreach ( $attributes as $attr_key => $attr_value ) {
+				$attributes_string .= esc_html( $attr_key ) . '="' . esc_attr( $attr_value ) . '"';
+			}
+
+			$attributes = $attributes_string;
+		}
+
 		$args = compact( 'attributes', 'value' );
 		$this->get_view( 'menu', $args );
 	}
@@ -213,6 +225,7 @@ class SFM_Plugin {
 	 */
 	public function get_view( $file = 'menu', $args = array() ) {
 		extract( $args );
+
 		$file = dirname( dirname( __FILE__ ) ) . "/views/$file.php";
 		if ( file_exists( $file ) ) {
 			include $file;
